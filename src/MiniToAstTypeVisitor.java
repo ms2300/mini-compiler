@@ -1,8 +1,6 @@
 import ast.*;
 
-public class MiniToAstTypeVisitor
-   extends MiniBaseVisitor<Type>
-{
+public class MiniToAstTypeVisitor extends MiniBaseVisitor<Type> {
    @Override
    public Type visitIntType(MiniParser.IntTypeContext ctx)
    {
