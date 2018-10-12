@@ -1,0 +1,7 @@
+.DS_STORE
+/gen
+/filetests
+/benchmarks
+/idea
+/jars
+/out
