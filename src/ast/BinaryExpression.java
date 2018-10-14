@@ -1,26 +1,21 @@
 package ast;
 
-public class BinaryExpression
-   extends AbstractExpression
-{
+import java.util.Map;
+
+public class BinaryExpression extends AbstractExpression {
    private final Operator operator;
    private final Expression left;
    private final Expression right;
 
-   private BinaryExpression(int lineNum, Operator operator,
-      Expression left, Expression right)
-   {
+   private BinaryExpression(int lineNum, Operator operator, Expression left, Expression right) {
       super(lineNum);
       this.operator = operator;
       this.left = left;
       this.right = right;
    }
 
-   public static BinaryExpression create(int lineNum, String opStr,
-      Expression left, Expression right)
-   {
-      switch (opStr)
-      {
+   public static BinaryExpression create(int lineNum, String opStr, Expression left, Expression right) {
+      switch (opStr) {
          case TIMES_OPERATOR:
             return new BinaryExpression(lineNum, Operator.TIMES, left, right);
          case DIVIDE_OPERATOR:
@@ -63,8 +58,29 @@ public class BinaryExpression
    private static final String AND_OPERATOR = "&&";
    private static final String OR_OPERATOR = "||";
 
-   public static enum Operator
-   {
+   public static enum Operator {
       TIMES, DIVIDE, PLUS, MINUS, LT, GT, LE, GE, EQ, NE, AND, OR
+   }
+
+   public Type static_type_check(Map<String, TypeScope> local_map) {
+      switch(operator) {
+         case TIMES: case DIVIDE: case PLUS: case MINUS:
+            if (left.static_type_check(local_map) instanceof IntType &&
+                  right.static_type_check(local_map) instanceof IntType) {
+               return new IntType();
+            }
+         case LT: case GT: case LE: case GE: case EQ: case NE:
+            if (left.static_type_check(local_map) instanceof IntType &&
+                  right.static_type_check(local_map) instanceof IntType) {
+               return new BoolType();
+            }
+         case AND: case OR:
+            if (left.static_type_check(local_map) instanceof BoolType &&
+                  right.static_type_check(local_map) instanceof BoolType) {
+               return new BoolType();
+            }
+      }
+      Program.error("Invalid binary expression line : " + this.getLineNum());
+      return null;
    }
 }

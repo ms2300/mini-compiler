@@ -1,6 +1,3 @@
 package ast;
 
-public class VoidType
-   implements Type
-{
-}
+public class VoidType implements Type { }

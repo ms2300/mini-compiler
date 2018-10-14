@@ -1,6 +1,3 @@
 package ast;
 
-public class IntType
-   implements Type
-{
-}
+public class IntType implements Type { }

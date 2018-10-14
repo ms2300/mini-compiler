@@ -2,7 +2,6 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import java.io.*;
-import javax.json.JsonValue;
 
 public class MiniCompiler {
    public static void main(String[] args) {
@@ -20,6 +19,7 @@ public class MiniCompiler {
          MiniToAstProgramVisitor programVisitor =
             new MiniToAstProgramVisitor();
          ast.Program program = programVisitor.visit(tree);
+         program.static_type_check();
       }
    }
 
