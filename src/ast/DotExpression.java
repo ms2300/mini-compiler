@@ -22,7 +22,6 @@ public class DotExpression extends AbstractExpression {
          }
          return ret;
       }
-      System.out.println("123");
       Program.error("Invalid dot expression line : " + this.getLineNum());
       return null;
    }
