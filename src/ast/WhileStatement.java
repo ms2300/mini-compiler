@@ -1,5 +1,8 @@
 package ast;
 
+import cfg.BasicBlock;
+import cfg.Label;
+
 import java.util.Map;
 
 public class WhileStatement extends AbstractStatement {
@@ -17,5 +20,25 @@ public class WhileStatement extends AbstractStatement {
          Program.error("Invalid guard to loop line : " + this.getLineNum());
       }
       return body.static_type_check(ret_type, local_map);
+   }
+
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+      /* Add guard to cur */
+      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.next()), end);
+      BasicBlock join = new BasicBlock(Label.next());
+      /* Add guard to guard block */
+      cur.add_desc(body_block);
+      body_block.add_pred(cur);
+      cur.add_desc(join);
+      join.add_pred(cur);
+      if (!(body_block.getDesc().size() > 0)) {
+         BasicBlock guard_block = new BasicBlock(Label.next());
+         body_block.add_desc(guard_block);
+         body_block.add_pred(guard_block);
+         guard_block.add_desc(body_block);
+         guard_block.add_desc(join);
+         join.add_pred(guard_block);
+      }
+      return join;
    }
 }

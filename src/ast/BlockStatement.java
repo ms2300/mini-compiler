@@ -1,5 +1,7 @@
 package ast;
 
+import cfg.BasicBlock;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -26,5 +28,15 @@ public class BlockStatement extends AbstractStatement {
          stmnt.static_type_check(ret_type, local_map);
       }
       return new VoidType();
+   }
+
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+      for (Statement s : statements) {
+         if (s instanceof ReturnEmptyStatement || s instanceof ReturnStatement) {
+            return s.make_cfg(cur, end);
+         }
+         cur = s.make_cfg(cur, end);
+      }
+      return cur;
    }
 }

@@ -1,7 +1,11 @@
+import ast.Function;
+import cfg.FunctionCFG;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import java.util.List;
 
 import java.io.*;
+import java.util.stream.Collectors;
 
 public class MiniCompiler {
    public static void main(String[] args) {
@@ -11,16 +15,13 @@ public class MiniCompiler {
       MiniParser parser = new MiniParser(tokens);
       ParseTree tree = parser.program();
 
-      if (parser.getNumberOfSyntaxErrors() == 0) {
-         /*
-            This visitor will build an object representation of the AST
-            in Java using the provided classes.
-         */
-         MiniToAstProgramVisitor programVisitor =
-            new MiniToAstProgramVisitor();
-         ast.Program program = programVisitor.visit(tree);
-         program.static_type_check();
+      if (parser.getNumberOfSyntaxErrors() != 0) {
+         error("Parsing error");
       }
+      MiniToAstProgramVisitor programVisitor = new MiniToAstProgramVisitor();
+      ast.Program program = programVisitor.visit(tree);
+      program.static_type_check();
+      List<FunctionCFG> cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
    }
 
    private static String _inputFile = null;

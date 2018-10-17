@@ -69,16 +69,21 @@ public class BinaryExpression extends AbstractExpression {
                   right.static_type_check(local_map) instanceof IntType) {
                return new IntType();
             }
+            break;
          case LT: case GT: case LE: case GE: case EQ: case NE:
-            if (left.static_type_check(local_map) instanceof IntType &&
-                  right.static_type_check(local_map) instanceof IntType) {
+            if ((left.static_type_check(local_map) instanceof IntType &&
+                  right.static_type_check(local_map) instanceof IntType) ||
+                (left.static_type_check(local_map) instanceof StructType &&
+                  right.static_type_check(local_map) instanceof StructType)) {
                return new BoolType();
             }
+            break;
          case AND: case OR:
             if (left.static_type_check(local_map) instanceof BoolType &&
                   right.static_type_check(local_map) instanceof BoolType) {
                return new BoolType();
             }
+            break;
       }
       Program.error("Invalid binary expression line : " + this.getLineNum());
       return null;

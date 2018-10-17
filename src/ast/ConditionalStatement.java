@@ -1,5 +1,8 @@
 package ast;
 
+import cfg.BasicBlock;
+import cfg.Label;
+
 import java.util.Map;
 
 public class ConditionalStatement extends AbstractStatement {
@@ -16,12 +19,30 @@ public class ConditionalStatement extends AbstractStatement {
 
    public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
       if (guard.static_type_check(local_map) instanceof BoolType) {
-         Type then_class = thenBlock.static_type_check(ret_type, local_map);
-         if (then_class.getClass().equals(elseBlock.static_type_check(ret_type, local_map).getClass())) {
-            return then_class;
-         }
+         thenBlock.static_type_check(ret_type, local_map);
+         elseBlock.static_type_check(ret_type, local_map);
+         return new VoidType();
       }
       Program.error("Invalid conditional line : " + this.getLineNum());
       return null;
+   }
+
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+      /* Add guard to cur */
+      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.next()), end);
+      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.next()), end);
+      BasicBlock join = new BasicBlock(Label.next());
+      if (!(then_flow.getDesc().size() > 0)) {
+         join.add_pred(then_flow);
+         then_flow.add_desc(join);
+      } else if (!(else_flow.getDesc().size() > 0)) {
+         join.add_pred(else_flow);
+         else_flow.add_desc(join);
+      }
+      then_flow.add_pred(cur);
+      else_flow.add_pred(cur);
+      cur.add_desc(then_flow);
+      cur.add_desc(else_flow);
+      return join;
    }
 }

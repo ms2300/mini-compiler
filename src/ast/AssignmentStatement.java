@@ -1,5 +1,7 @@
 package ast;
 
+import cfg.BasicBlock;
+
 import java.util.Map;
 
 public class AssignmentStatement extends AbstractStatement {
@@ -22,5 +24,12 @@ public class AssignmentStatement extends AbstractStatement {
          Program.error("Invalid assignment line : " + this.getLineNum());
       }
       return new VoidType();
+   }
+
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+      /*
+         Add instructions
+       */
+      return cur;
    }
 }

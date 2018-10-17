@@ -52,4 +52,6 @@ public class Program {
       System.err.println(msg);
       System.exit(1);
    }
+
+   public List<Function> getFuncs() { return funcs; }
 }

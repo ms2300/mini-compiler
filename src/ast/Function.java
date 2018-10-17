@@ -1,5 +1,7 @@
 package ast;
 
+import cfg.FunctionCFG;
+
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -25,6 +27,11 @@ public class Function {
    }
 
    private void get_local_map() {
+      if (name.equals("main")) {
+         if (!(retType instanceof IntType)) {
+            Program.error("Main doesn't return an int");
+         }
+      }
       Map<String, TypeScope> local_map = new HashMap<>();
       /* Check if param is overwritten */
       locals.forEach(decl -> local_map.put(decl.getName(), new TypeScope(decl.getType(), TypeScope.Scope.Local)));
@@ -35,6 +42,10 @@ public class Function {
    public void static_type_check() {
       /* Check for return at some point */
       body.static_type_check(this.retType, this.local_map);
+   }
+
+   public FunctionCFG toCfg() {
+      return new FunctionCFG(params, locals, body);
    }
 
    public String getName() { return this.name; }

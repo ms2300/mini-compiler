@@ -1,5 +1,7 @@
 package ast;
 
+import cfg.BasicBlock;
+
 import java.util.Map;
 
 public class DeleteStatement extends AbstractStatement {
@@ -16,5 +18,12 @@ public class DeleteStatement extends AbstractStatement {
          Program.error("Invalid delete statement line : " + this.getLineNum());
       }
       return del;
+   }
+
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+      /*
+         Add instructions
+       */
+      return cur;
    }
 }

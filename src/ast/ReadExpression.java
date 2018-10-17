@@ -8,5 +8,5 @@ public class ReadExpression extends AbstractExpression {
       super(lineNum);
    }
 
-   public Type static_type_check(Map<String, TypeScope> local_map) { return new BoolType(); }
+   public Type static_type_check(Map<String, TypeScope> local_map) { return new IntType(); }
 }

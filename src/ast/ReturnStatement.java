@@ -1,5 +1,7 @@
 package ast;
 
+import cfg.BasicBlock;
+
 import java.util.Map;
 
 public class ReturnStatement extends AbstractStatement {
@@ -15,5 +17,14 @@ public class ReturnStatement extends AbstractStatement {
          Program.error("Invalid return statement line : " + this.getLineNum());
       }
       return ret_type;
+   }
+
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+      /*
+         Add instructions
+       */
+      end.add_pred(cur);
+      cur.add_desc(end);
+      return cur;
    }
 }
