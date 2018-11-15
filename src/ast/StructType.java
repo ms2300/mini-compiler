@@ -12,4 +12,8 @@ public class StructType implements Type {
    public String getName() {
       return this.name;
    }
+
+   public String to_llvm() {
+      return "struct " + name;
+   }
 }

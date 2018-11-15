@@ -1,20 +1,25 @@
 package instructions;
 
-public class MathematicalInstruction extends AbstractInstruction {
-   private final String result;
-   private final String ty;
-   private final String op1;
-   private final String op2;
+import llvm.LLVMValue;
+import llvm.Register;
 
-   public MathematicalInstruction(String result, String opc, String ty, String op1, String op2) {
+public class MathematicalInstruction extends AbstractInstruction {
+   private Register reg;
+   private final String ty;
+   private final LLVMValue op1;
+   private final LLVMValue op2;
+
+   public MathematicalInstruction(String opc, String ty, LLVMValue op1, LLVMValue op2) {
       super(opc);
-      this.result = result;
       this.ty = ty;
+      this.reg = new Register(this.ty);
       this.op1 = op1;
       this.op2 = op2;
    }
 
    public String toString() {
-      return result + " = " + this.getOp_code() + " " + ty + " " + op1 + ", " + op2;
+      return reg.get_name() + " = " + this.getOp_code() + " " + this.ty + " " + op1.get_name() + ", " + op2.get_name();
    }
+
+   public Register getReg() { return this.reg; }
 }

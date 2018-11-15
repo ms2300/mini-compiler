@@ -1,5 +1,11 @@
 package ast;
 
+import cfg.BasicBlock;
+import instructions.CmpInstruction;
+import instructions.MathematicalInstruction;
+import instructions.ZextInstruction;
+import llvm.LLVMValue;
+
 import java.util.Map;
 
 public class BinaryExpression extends AbstractExpression {
@@ -63,7 +69,7 @@ public class BinaryExpression extends AbstractExpression {
    }
 
    public Type static_type_check(Map<String, TypeScope> local_map) {
-      switch(operator) {
+      switch (operator) {
          case TIMES: case DIVIDE: case PLUS: case MINUS:
             if (left.static_type_check(local_map) instanceof IntType &&
                   right.static_type_check(local_map) instanceof IntType) {
@@ -87,5 +93,77 @@ public class BinaryExpression extends AbstractExpression {
       }
       Program.error("Invalid binary expression line : " + this.getLineNum());
       return null;
+   }
+
+   public LLVMValue get_llvm(BasicBlock cur) {
+      LLVMValue op1 = left.get_llvm(cur);
+      LLVMValue op2 = right.get_llvm(cur);
+      switch (operator) {
+         case TIMES: {
+            MathematicalInstruction m = new MathematicalInstruction("mul", "i32", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+            break;
+         } case DIVIDE: {
+            MathematicalInstruction m = new MathematicalInstruction("sdiv","i32", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+            break;
+         } case PLUS: {
+            MathematicalInstruction m = new MathematicalInstruction("add","i32", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+            break;
+         } case MINUS: {
+            MathematicalInstruction m = new MathematicalInstruction("sub","i32", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+            break;
+         } case LE: {
+            CmpInstruction c = new CmpInstruction("sle", "i32", op1, op2);
+            ZextInstruction z = new ZextInstruction(c.getReg());
+            cur.add_instruction(c);
+            cur.add_instruction(z);
+            return z.getReg();
+         } case LT: {
+            CmpInstruction c = new CmpInstruction("slt", "i32", op1, op2);
+            ZextInstruction z = new ZextInstruction(c.getReg());
+            cur.add_instruction(c);
+            cur.add_instruction(z);
+            return z.getReg();
+         } case GE: {
+            CmpInstruction c = new CmpInstruction("sge", "i32", op1, op2);
+            ZextInstruction z = new ZextInstruction(c.getReg());
+            cur.add_instruction(c);
+            cur.add_instruction(z);
+            return z.getReg();
+         } case GT: {
+            CmpInstruction c = new CmpInstruction("sgt", "i32", op1, op2);
+            ZextInstruction z = new ZextInstruction(c.getReg());
+            cur.add_instruction(c);
+            cur.add_instruction(z);
+            return z.getReg();
+         } case EQ: {
+            CmpInstruction c = new CmpInstruction("eq", "i32", op1, op2);
+            ZextInstruction z = new ZextInstruction(c.getReg());
+            cur.add_instruction(c);
+            cur.add_instruction(z);
+            return z.getReg();
+         } case NE: {
+            CmpInstruction c = new CmpInstruction("ne", "i32", op1, op2);
+            ZextInstruction z = new ZextInstruction(c.getReg());
+            cur.add_instruction(c);
+            cur.add_instruction(z);
+            return z.getReg();
+         } case OR: {
+            MathematicalInstruction m = new MathematicalInstruction("or", "i1", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+         } case AND: {
+            MathematicalInstruction m = new MathematicalInstruction("and", "i1", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+         }
+      }
    }
 }

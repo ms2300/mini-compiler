@@ -14,4 +14,6 @@ public class FuncType implements Type {
     public Type getRetType() { return this.retType; }
 
     public List<Declaration> getParams() { return this.params; }
+
+    public String to_llvm() { return "ohh boi"; }
 }

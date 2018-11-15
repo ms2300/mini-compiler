@@ -1,5 +1,12 @@
 package ast;
 
+import cfg.BasicBlock;
+import instructions.CmpInstruction;
+import instructions.MathematicalInstruction;
+import instructions.ZextInstruction;
+import llvm.Immediate;
+import llvm.LLVMValue;
+
 import java.util.Map;
 
 public class UnaryExpression extends AbstractExpression {
@@ -42,5 +49,22 @@ public class UnaryExpression extends AbstractExpression {
       }
       Program.error("Invalid unary expression line : " + this.getLineNum());
       return null;
+   }
+
+   public LLVMValue get_llvm(BasicBlock cur) {
+      LLVMValue op1 = operand.get_llvm(cur);
+      switch (operator) {
+         case NOT: {
+            LLVMValue op2 = new Immediate("0", "i1");
+            CmpInstruction c = new CmpInstruction("eq", "i1", op1, op2);
+            cur.add_instruction(c);
+            return c.getReg();
+         } case MINUS: {
+            LLVMValue op2 = new Immediate("-1", "i32");
+            MathematicalInstruction m = new MathematicalInstruction("mul", "i32", op1, op2);
+            cur.add_instruction(m);
+            return m.getReg();
+         }
+      }
    }
 }

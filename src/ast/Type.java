@@ -1,3 +1,5 @@
 package ast;
 
-public interface Type { }
+public interface Type {
+   String to_llvm();
+}

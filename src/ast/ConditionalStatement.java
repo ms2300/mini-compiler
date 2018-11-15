@@ -35,7 +35,8 @@ public class ConditionalStatement extends AbstractStatement {
       if (!(then_flow.getDesc().size() > 0)) {
          join.add_pred(then_flow);
          then_flow.add_desc(join);
-      } else if (!(else_flow.getDesc().size() > 0)) {
+      }
+      if (!(else_flow.getDesc().size() > 0)) {
          join.add_pred(else_flow);
          else_flow.add_desc(join);
       }

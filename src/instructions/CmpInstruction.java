@@ -1,22 +1,27 @@
 package instructions;
 
-public class CmpInstruction extends AbstractInstruction {
-   private final String result;
-   private final String cond;
-   private final String ty;
-   private final String op1;
-   private final String op2;
+import llvm.LLVMValue;
+import llvm.Register;
 
-   public CmpInstruction(String result, String cond, String ty, String op1, String op2) {
+public class CmpInstruction extends AbstractInstruction {
+   private Register reg;
+   private final String ty;
+   private final String cond;
+   private final LLVMValue op1;
+   private final LLVMValue op2;
+
+   public CmpInstruction(String cond, String ty, LLVMValue op1, LLVMValue op2) {
       super("icmp");
-      this.result = result;
-      this.cond = cond;
       this.ty = ty;
+      this.reg = new Register("i32");
+      this.cond = cond;
       this.op1 = op1;
       this.op2 = op2;
    }
 
    public String toString() {
-      return result + " = " + this.getOp_code() + " " + cond + " " + ty + " " + op1 + ", " + op2;
+      return reg.get_name() + " = " + this.getOp_code() + " " + cond + " " + this.ty + " " + op1.get_name() + ", " + op2.get_name();
    }
+
+   public Register getReg() { return this.reg; }
 }

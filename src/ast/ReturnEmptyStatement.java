@@ -23,6 +23,6 @@ public class ReturnEmptyStatement extends AbstractStatement {
        */
       end.add_pred(cur);
       cur.add_desc(end);
-      return cur;
+      return end;
    }
 }

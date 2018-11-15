@@ -45,7 +45,7 @@ public class Function {
    }
 
    public FunctionCFG toCfg() {
-      return new FunctionCFG(params, locals, body);
+      return new FunctionCFG(name, params, locals, body, retType);
    }
 
    public String getName() { return this.name; }
