@@ -1,5 +1,7 @@
 package instructions;
 
+import llvm.Register;
+
 public class StoreInstruction extends AbstractInstruction {
    private final String ty;
    private final String value;
@@ -15,4 +17,5 @@ public class StoreInstruction extends AbstractInstruction {
    public String toString() {
       return this.getOp_code() + " " + ty + " " + value + ", " + ty + "* " + pointer;
    }
+   public Register getReg() { return null; }
 }

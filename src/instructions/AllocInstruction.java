@@ -1,5 +1,7 @@
 package instructions;
 
+import llvm.Register;
+
 public class AllocInstruction extends AbstractInstruction {
    private final String result;
    private final String ty;
@@ -13,4 +15,5 @@ public class AllocInstruction extends AbstractInstruction {
    public String toString() {
       return result + " = " + this.getOp_code() + " " + ty;
    }
+   public Register getReg() { return null; }
 }

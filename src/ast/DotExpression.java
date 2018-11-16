@@ -1,5 +1,9 @@
 package ast;
 
+import cfg.BasicBlock;
+import instructions.GetPtrInstruction;
+import llvm.LLVMValue;
+
 import java.util.Map;
 
 public class DotExpression extends AbstractExpression {
@@ -24,5 +28,15 @@ public class DotExpression extends AbstractExpression {
       }
       Program.error("Invalid dot expression line : " + this.getLineNum());
       return null;
+   }
+
+   public LLVMValue get_llvm(BasicBlock cur) {
+      LLVMValue l = left.get_llvm(cur);
+      /*
+         GET CORRECT INDEX
+       */
+      GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, "2");
+      cur.add_instruction(g);
+      return g.getReg();
    }
 }

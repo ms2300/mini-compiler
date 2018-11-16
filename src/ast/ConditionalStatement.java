@@ -29,9 +29,9 @@ public class ConditionalStatement extends AbstractStatement {
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
       /* Add guard to cur */
-      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.next()), end);
-      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.next()), end);
-      BasicBlock join = new BasicBlock(Label.next());
+      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end);
+      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end);
+      BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       if (!(then_flow.getDesc().size() > 0)) {
          join.add_pred(then_flow);
          then_flow.add_desc(join);

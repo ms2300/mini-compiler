@@ -1,18 +1,19 @@
 package instructions;
 
+import llvm.Register;
+
 public class LoadInstruction extends AbstractInstruction {
-   private final String result;
+   private final Register reg;
    private final String ty;
-   private final String pointer;
+   private final String label;
 
-   public LoadInstruction(String result, String ty, String pointer) {
+   public LoadInstruction(String label, String ty) {
       super("load");
-      this.result = result;
       this.ty = ty;
-      this.pointer = pointer;
+      this.reg = new Register("i32");
+      this.label = label;
    }
 
-   public String toString() {
-      return result + " = " + this.getOp_code() + " " + ty + "* " + pointer;
-   }
+   public String toString() { return reg.get_name() + " = " + this.getOp_code() + " " + this.ty + "* " + label; }
+   public Register getReg() { return this.reg; }
 }

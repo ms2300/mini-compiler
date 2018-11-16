@@ -4,7 +4,7 @@ import llvm.LLVMValue;
 import llvm.Register;
 
 public class ZextInstruction extends AbstractInstruction {
-   private Register reg;
+   private final Register reg;
    private final LLVMValue value;
 
    public ZextInstruction(LLVMValue value) {

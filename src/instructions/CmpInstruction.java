@@ -4,7 +4,7 @@ import llvm.LLVMValue;
 import llvm.Register;
 
 public class CmpInstruction extends AbstractInstruction {
-   private Register reg;
+   private final Register reg;
    private final String ty;
    private final String cond;
    private final LLVMValue op1;

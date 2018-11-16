@@ -103,22 +103,18 @@ public class BinaryExpression extends AbstractExpression {
             MathematicalInstruction m = new MathematicalInstruction("mul", "i32", op1, op2);
             cur.add_instruction(m);
             return m.getReg();
-            break;
          } case DIVIDE: {
             MathematicalInstruction m = new MathematicalInstruction("sdiv","i32", op1, op2);
             cur.add_instruction(m);
             return m.getReg();
-            break;
          } case PLUS: {
             MathematicalInstruction m = new MathematicalInstruction("add","i32", op1, op2);
             cur.add_instruction(m);
             return m.getReg();
-            break;
          } case MINUS: {
             MathematicalInstruction m = new MathematicalInstruction("sub","i32", op1, op2);
             cur.add_instruction(m);
             return m.getReg();
-            break;
          } case LE: {
             CmpInstruction c = new CmpInstruction("sle", "i32", op1, op2);
             ZextInstruction z = new ZextInstruction(c.getReg());
@@ -165,5 +161,7 @@ public class BinaryExpression extends AbstractExpression {
             return m.getReg();
          }
       }
+      Program.error("Error in llvm generation binary expression line : " + this.getLineNum());
+      return null;
    }
 }

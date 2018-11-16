@@ -1,5 +1,7 @@
 package instructions;
 
+import llvm.Register;
+
 public class BranchConditional extends AbstractInstruction {
    private final String cond;
    private final String iftrue;
@@ -15,4 +17,5 @@ public class BranchConditional extends AbstractInstruction {
    public String toString() {
       return this.getOp_code() + " i1 " + cond + ", label " + iftrue + ", label " + iffalse;
    }
+   public Register getReg() { return null; }
 }

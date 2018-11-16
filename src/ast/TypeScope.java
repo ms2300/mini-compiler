@@ -16,4 +16,5 @@ public class TypeScope {
     }
 
     public Type getTy() { return this.ty; }
+    public Scope getScope() { return this.scope; }
 }

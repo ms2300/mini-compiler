@@ -1,5 +1,10 @@
 package ast;
 
+import cfg.BasicBlock;
+import instructions.CallInstruction;
+import llvm.LLVMValue;
+import llvm.Register;
+
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,5 +42,25 @@ public class InvocationExpression extends AbstractExpression {
       }
       Program.error("Invalid function type line : " + this.getLineNum());
       return null;
+   }
+
+   public LLVMValue get_llvm(BasicBlock cur) {
+      Type inv = Program.var_map.get(name).getTy();
+      if (inv instanceof FuncType) {
+         FuncType f = (FuncType) inv;
+         CallInstruction c = new CallInstruction(f.getRetType().to_llvm(), "@" + name, this.getLLVMParams(cur));
+         cur.add_instruction(c);
+         return c.getReg();
+      }
+      Program.error("Error generating llvm invocation line : " + this.getLineNum());
+      return null;
+   }
+
+   public String getLLVMParams(BasicBlock cur) {
+      String arg_string = this.arguments.stream().map(arg -> {
+         LLVMValue r = arg.get_llvm(cur);
+         return r.get_type() + " " + r.get_name();
+      }).collect(Collectors.joining(","));
+      return "(" + arg_string + ")";
    }
 }

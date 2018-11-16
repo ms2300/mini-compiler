@@ -15,7 +15,7 @@ public class FunctionCFG {
    private final Type retType;
    private final Statement body;
 
-   public FunctionCFG(String name, List<Declaration> params, List<Declaration> locals, Type retType ,Statement body) {
+   public FunctionCFG(String name, List<Declaration> params, List<Declaration> locals, Type retType, Statement body) {
       this.name = name;
       this.params = params;
       this.locals = locals;

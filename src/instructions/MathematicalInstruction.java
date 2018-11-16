@@ -4,7 +4,7 @@ import llvm.LLVMValue;
 import llvm.Register;
 
 public class MathematicalInstruction extends AbstractInstruction {
-   private Register reg;
+   private final Register reg;
    private final String ty;
    private final LLVMValue op1;
    private final LLVMValue op2;

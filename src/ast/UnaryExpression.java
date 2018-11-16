@@ -3,7 +3,6 @@ package ast;
 import cfg.BasicBlock;
 import instructions.CmpInstruction;
 import instructions.MathematicalInstruction;
-import instructions.ZextInstruction;
 import llvm.Immediate;
 import llvm.LLVMValue;
 
@@ -66,5 +65,7 @@ public class UnaryExpression extends AbstractExpression {
             return m.getReg();
          }
       }
+      Program.error("Problem with llvm generation line : " + this.getLineNum());
+      return null;
    }
 }

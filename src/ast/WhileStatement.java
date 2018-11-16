@@ -24,15 +24,15 @@ public class WhileStatement extends AbstractStatement {
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
       /* Add guard to cur */
-      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.next()), end);
-      BasicBlock join = new BasicBlock(Label.next());
+      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.nextBlockLabel()), end);
+      BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       /* Add guard to guard block */
       cur.add_desc(body_block);
       body_block.add_pred(cur);
       cur.add_desc(join);
       join.add_pred(cur);
       if (!(body_block.getDesc().size() > 0)) {
-         BasicBlock guard_block = new BasicBlock(Label.next());
+         BasicBlock guard_block = new BasicBlock(Label.nextBlockLabel());
          body_block.add_desc(guard_block);
          body_block.add_pred(guard_block);
          guard_block.add_desc(body_block);

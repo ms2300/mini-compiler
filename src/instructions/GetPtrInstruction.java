@@ -1,20 +1,24 @@
 package instructions;
 
+import llvm.LLVMValue;
+import llvm.Register;
+
 public class GetPtrInstruction extends AbstractInstruction {
-   private final String result;
+   private final Register reg;
+   private final LLVMValue value;
    private final String ty;
-   private final String ptrval;
    private final String index;
 
-   public GetPtrInstruction(String result, String ty, String ptrval, String index) {
+   public GetPtrInstruction(String ty, LLVMValue value, String index) {
       super("getelementptr");
-      this.result = result;
+      this.reg = new Register("i32");
       this.ty = ty;
-      this.ptrval = ptrval;
+      this.value = value;
       this.index = index;
    }
 
    public String toString() {
-      return result + " = " + this.getOp_code() + ty + "* " + ptrval + ", i1 0, i32 " + index;
+      return reg.get_name() + " = " + this.getOp_code() + ty + " " + value.get_name() + ", i1 0, i32 " + index;
    }
+   public Register getReg() { return this.reg; }
 }

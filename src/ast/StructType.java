@@ -14,6 +14,6 @@ public class StructType implements Type {
    }
 
    public String to_llvm() {
-      return "struct " + name;
+      return "%struct." + name + "*";
    }
 }
