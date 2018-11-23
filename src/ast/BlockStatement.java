@@ -1,6 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
+import llvm.Register;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -30,12 +31,12 @@ public class BlockStatement extends AbstractStatement {
       return new VoidType();
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
       for (Statement s : statements) {
          if (s instanceof ReturnEmptyStatement || s instanceof ReturnStatement) {
-            return s.make_cfg(cur, end);
+            return s.make_cfg(cur, end, ret_val);
          }
-         cur = s.make_cfg(cur, end);
+         cur = s.make_cfg(cur, end, ret_val);
       }
       return cur;
    }

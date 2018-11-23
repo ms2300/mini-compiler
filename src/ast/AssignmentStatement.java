@@ -1,6 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
+import llvm.Register;
 
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class AssignmentStatement extends AbstractStatement {
       return new VoidType();
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
       /*
          Add instructions
        */

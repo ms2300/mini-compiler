@@ -8,14 +8,10 @@ public class Register implements LLVMValue {
 
    public Register(String type_name) {
       this.type_name = type_name;
-      if (this.type_name.equals("i32")) {
+      if (this.type_name.equals("i32") || this.type_name.equals("i1")) {
          this.reg_name = "%u" + Label.nextRegister();
       } else {
-         if (this.type_name.charAt(0) == '@') {
-            this.reg_name = this.type_name;
-         } else {
-            this.reg_name = "%" + this.type_name;
-         }
+         this.reg_name = "%" + this.type_name;
       }
    }
 

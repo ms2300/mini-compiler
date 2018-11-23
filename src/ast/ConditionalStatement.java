@@ -2,6 +2,7 @@ package ast;
 
 import cfg.BasicBlock;
 import cfg.Label;
+import llvm.Register;
 
 import java.util.Map;
 
@@ -27,10 +28,10 @@ public class ConditionalStatement extends AbstractStatement {
       return null;
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
       /* Add guard to cur */
-      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end);
-      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end);
+      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
+      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       if (!(then_flow.getDesc().size() > 0)) {
          join.add_pred(then_flow);

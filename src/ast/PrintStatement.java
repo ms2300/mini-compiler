@@ -1,6 +1,8 @@
 package ast;
 
 import cfg.BasicBlock;
+import llvm.LLVMValue;
+import llvm.Register;
 
 import java.util.Map;
 
@@ -17,9 +19,10 @@ public class PrintStatement extends AbstractStatement {
       return new VoidType();
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+      LLVMValue pr = expression.get_llvm(cur);
       /*
-         Add instructions
+         Do printing instruction with pr
        */
       return cur;
    }

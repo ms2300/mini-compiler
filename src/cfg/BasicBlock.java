@@ -27,6 +27,8 @@ public class BasicBlock {
 
    public List<BasicBlock> getDesc() { return desc; }
 
+   public String getLabel() { return this.label; }
+
    public String to_llvm() {
       String body = "";
       instructions.stream().forEach(x -> body.concat("\t" + x.toString() + "\n"));

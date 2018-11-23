@@ -2,6 +2,7 @@ package ast;
 
 import cfg.BasicBlock;
 import cfg.Label;
+import llvm.Register;
 
 import java.util.Map;
 
@@ -22,9 +23,9 @@ public class WhileStatement extends AbstractStatement {
       return body.static_type_check(ret_type, local_map);
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
       /* Add guard to cur */
-      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.nextBlockLabel()), end);
+      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       /* Add guard to guard block */
       cur.add_desc(body_block);
