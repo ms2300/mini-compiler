@@ -1,5 +1,6 @@
 package ast;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ public class Program {
    private final List<Function> funcs;
    public static Map<String, TypeScope> var_map;
    public static Map<String, Map<String, Type>> struct_map;
+   public static Map<String, List<String>> naive_struct_map;
 
    public Program(List<TypeDeclaration> types, List<Declaration> decls, List<Function> funcs) {
       this.types = types;
@@ -38,12 +40,19 @@ public class Program {
 
    private void create_struct_map() {
       Map<String, Map<String, Type>> struct_map = new HashMap<>();
+      Map<String, List<String>> naive_struct_map = new HashMap<>();
       types.forEach(type -> {
          Map<String, Type> struct = new HashMap<>();
-         type.getFields().forEach(field -> struct.put(field.getName(), field.getType()));
+         List<String> fields = new ArrayList<>();
+         type.getFields().forEach(field -> {
+            struct.put(field.getName(), field.getType());
+            fields.add(field.getName());
+         });
+         naive_struct_map.put(type.getName(), fields);
          struct_map.put(type.getName(), struct);
       });
       this.struct_map = struct_map;
+      this.naive_struct_map = naive_struct_map;
    }
 
    public void static_type_check() { funcs.forEach(func -> func.static_type_check()); }

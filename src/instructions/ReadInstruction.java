@@ -2,11 +2,13 @@ package instructions;
 
 import llvm.Register;
 
+import java.util.Optional;
+
 public class ReadInstruction implements Instruction {
    private final Register reg;
 
    public ReadInstruction() {
-      this.reg = new Register("i32");
+      this.reg = new Register("i32", Optional.empty());
    }
 
    public String toString() {

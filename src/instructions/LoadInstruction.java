@@ -2,6 +2,8 @@ package instructions;
 
 import llvm.Register;
 
+import java.util.Optional;
+
 public class LoadInstruction extends AbstractInstruction {
    private final Register reg;
    private final String ty;
@@ -10,7 +12,7 @@ public class LoadInstruction extends AbstractInstruction {
    public LoadInstruction(String label, String ty) {
       super("load");
       this.ty = ty;
-      this.reg = new Register("i32");
+      this.reg = new Register("i32", Optional.empty());
       this.label = label;
    }
 

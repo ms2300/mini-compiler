@@ -3,13 +3,15 @@ package instructions;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.Optional;
+
 public class ZextInstruction extends AbstractInstruction {
    private final Register reg;
    private final LLVMValue value;
 
    public ZextInstruction(LLVMValue value) {
       super("zext");
-      this.reg = new Register("i1");
+      this.reg = new Register("i1", Optional.empty());
       this.value = value;
    }
 

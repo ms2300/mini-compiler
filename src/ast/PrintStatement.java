@@ -1,6 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
+import instructions.PrintInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
@@ -21,9 +22,8 @@ public class PrintStatement extends AbstractStatement {
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
       LLVMValue pr = expression.get_llvm(cur);
-      /*
-         Do printing instruction with pr
-       */
+      PrintInstruction p = new PrintInstruction(pr, false);
+      cur.add_instruction(p);
       return cur;
    }
 }

@@ -3,6 +3,8 @@ package instructions;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.Optional;
+
 public class MathematicalInstruction extends AbstractInstruction {
    private final Register reg;
    private final String ty;
@@ -12,7 +14,7 @@ public class MathematicalInstruction extends AbstractInstruction {
    public MathematicalInstruction(String opc, String ty, LLVMValue op1, LLVMValue op2) {
       super(opc);
       this.ty = ty;
-      this.reg = new Register(this.ty);
+      this.reg = new Register(this.ty, Optional.empty());
       this.op1 = op1;
       this.op2 = op2;
    }

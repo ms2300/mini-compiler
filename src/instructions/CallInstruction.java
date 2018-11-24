@@ -2,6 +2,8 @@ package instructions;
 
 import llvm.Register;
 
+import java.util.Optional;
+
 public class CallInstruction extends AbstractInstruction {
    private final Register reg;
    private final String ret_ty;
@@ -10,7 +12,7 @@ public class CallInstruction extends AbstractInstruction {
 
    public CallInstruction(String ret_ty, String func_name, String param_string) {
       super("call");
-      this.reg = new Register(ret_ty);
+      this.reg = new Register(ret_ty, Optional.empty());
       this.ret_ty = ret_ty;
       this.func_name = func_name;
       this.param_string = param_string;

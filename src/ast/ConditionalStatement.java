@@ -2,6 +2,9 @@ package ast;
 
 import cfg.BasicBlock;
 import cfg.Label;
+import instructions.BranchConditional;
+import instructions.BranchInstruction;
+import llvm.LLVMValue;
 import llvm.Register;
 
 import java.util.Map;
@@ -29,10 +32,18 @@ public class ConditionalStatement extends AbstractStatement {
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
-      /* Add guard to cur */
+      /*
+         There might be problems with returns from conditions here
+       */
       BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
       BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
+      LLVMValue gx = guard.get_llvm(cur);
+      BranchConditional br_c = new BranchConditional(gx, then_flow.getLabel(), else_flow.getLabel());
+      cur.add_instruction(br_c);
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
+      BranchInstruction br_a = new BranchInstruction(join.getLabel());
+      then_flow.add_instruction(br_a);
+      else_flow.add_instruction(br_a);
       if (!(then_flow.getDesc().size() > 0)) {
          join.add_pred(then_flow);
          then_flow.add_desc(join);

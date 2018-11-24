@@ -3,6 +3,8 @@ package instructions;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.Optional;
+
 public class GetPtrInstruction extends AbstractInstruction {
    private final Register reg;
    private final LLVMValue value;
@@ -11,7 +13,7 @@ public class GetPtrInstruction extends AbstractInstruction {
 
    public GetPtrInstruction(String ty, LLVMValue value, String index) {
       super("getelementptr");
-      this.reg = new Register("i32");
+      this.reg = new Register("i32", Optional.empty());
       this.ty = ty;
       this.value = value;
       this.index = index;

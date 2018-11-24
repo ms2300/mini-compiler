@@ -3,6 +3,8 @@ package instructions;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.Optional;
+
 public class CmpInstruction extends AbstractInstruction {
    private final Register reg;
    private final String ty;
@@ -13,7 +15,7 @@ public class CmpInstruction extends AbstractInstruction {
    public CmpInstruction(String cond, String ty, LLVMValue op1, LLVMValue op2) {
       super("icmp");
       this.ty = ty;
-      this.reg = new Register("i32");
+      this.reg = new Register("i32", Optional.empty());
       this.cond = cond;
       this.op1 = op1;
       this.op2 = op2;

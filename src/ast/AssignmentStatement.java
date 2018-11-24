@@ -1,6 +1,8 @@
 package ast;
 
 import cfg.BasicBlock;
+import instructions.StoreInstruction;
+import llvm.LLVMValue;
 import llvm.Register;
 
 import java.util.Map;
@@ -28,9 +30,10 @@ public class AssignmentStatement extends AbstractStatement {
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
-      /*
-         Add instructions
-       */
+      Register left = target.ref_llvm(cur);
+      LLVMValue right = source.get_llvm(cur);
+      StoreInstruction st = new StoreInstruction(left.get_type(), right, left);
+      cur.add_instruction(st);
       return cur;
    }
 }

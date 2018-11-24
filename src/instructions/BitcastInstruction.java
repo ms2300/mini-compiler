@@ -3,6 +3,8 @@ package instructions;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.Optional;
+
 public class BitcastInstruction extends AbstractInstruction {
    private final Register reg;
    private final LLVMValue value;
@@ -11,7 +13,7 @@ public class BitcastInstruction extends AbstractInstruction {
 
    public BitcastInstruction(LLVMValue value, String ty1, String ty2) {
       super("bitcast");
-      this.reg = new Register("i1");
+      this.reg = new Register("i1", Optional.empty());
       this.value = value;
       this.ty1 = ty1;
       this.ty2 = ty2;
