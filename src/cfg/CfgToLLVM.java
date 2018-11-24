@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class CfgToLLVM {
    public static String process_cfgs(List<FunctionCFG> cfgs, Program program) {
-      String header = "target triple=\"i686\"\n";
+      String header = "target triple=\"i686\"\n@_read_val_ = global i32 0\n";
       String structs = program.getTypes().stream().map(CfgToLLVM::process_type).collect(Collectors.joining("\n")) + "\n";
       String globals = program.getDecls().stream().map(CfgToLLVM::process_global).collect(Collectors.joining("\n")) + "\n\n";
       String body = cfgs.stream().map(CfgToLLVM::process_cfg).collect(Collectors.joining("\n")) + "\n";

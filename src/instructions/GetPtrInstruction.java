@@ -9,18 +9,20 @@ public class GetPtrInstruction extends AbstractInstruction {
    private final Register reg;
    private final LLVMValue value;
    private final String ty;
+   private final String result_ty;
    private final String index;
 
-   public GetPtrInstruction(String ty, LLVMValue value, String index) {
+   public GetPtrInstruction(String ty, LLVMValue value, String index, String result_ty) {
       super("getelementptr");
-      this.reg = new Register("i32", Optional.empty());
       this.ty = ty;
+      this.result_ty = result_ty;
+      this.reg = new Register(this.result_ty, Optional.empty());
       this.value = value;
       this.index = index;
    }
 
    public String toString() {
-      return reg.get_name() + " = " + this.getOp_code() + ty + " " + value.get_name() + ", i1 0, i32 " + index;
+      return reg.get_name() + " = " + this.getOp_code() + " " + ty + " " + value.get_name() + ", i1 0, i32 " + index;
    }
    public Register getReg() { return this.reg; }
 }

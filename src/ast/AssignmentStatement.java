@@ -31,8 +31,8 @@ public class AssignmentStatement extends AbstractStatement {
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
-      String left = target.ref_llvm(cur);
       LLVMValue right = source.get_llvm(cur);
+      String left = target.ref_llvm(cur);
       StoreInstruction st = new StoreInstruction(right.get_type(), right, left);
       cur.add_instruction(st);
       return cur;

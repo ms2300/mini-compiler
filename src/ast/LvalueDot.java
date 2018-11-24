@@ -2,9 +2,11 @@ package ast;
 
 import cfg.BasicBlock;
 import instructions.GetPtrInstruction;
+import instructions.Instruction;
+import instructions.LoadInstruction;
 import llvm.LLVMValue;
-import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class LvalueDot implements Lvalue {
@@ -12,6 +14,7 @@ public class LvalueDot implements Lvalue {
    private final Expression left;
    private final String id;
    private String struct_name;
+   private Type result_type;
 
    public LvalueDot(int lineNum, Expression left, String id) {
       this.lineNum = lineNum;
@@ -25,6 +28,7 @@ public class LvalueDot implements Lvalue {
          this.struct_name = ((StructType) s).getName();
          Map<String, Type> st = Program.struct_map.get(this.struct_name);
          Type ret = st.get(id);
+         this.result_type = ret;
          if (ret != null) {
             return ret;
          }
@@ -35,8 +39,8 @@ public class LvalueDot implements Lvalue {
 
    public String ref_llvm(BasicBlock cur) {
       LLVMValue l = left.get_llvm(cur);
-      int index = Program.naive_struct_map.get(this.struct_name).indexOf(id);
-      GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(index));
+      List<String> indices = Program.naive_struct_map.get(this.struct_name);
+      GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(indices.indexOf(id)), result_type.to_llvm());
       cur.add_instruction(g);
       return g.getReg().get_name();
    }

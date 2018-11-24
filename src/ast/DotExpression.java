@@ -2,6 +2,7 @@ package ast;
 
 import cfg.BasicBlock;
 import instructions.GetPtrInstruction;
+import instructions.LoadInstruction;
 import llvm.LLVMValue;
 
 import java.util.Map;
@@ -10,6 +11,7 @@ public class DotExpression extends AbstractExpression {
    private final Expression left;
    private final String id;
    private String struct_name;
+   private Type result_type;
 
    public DotExpression(int lineNum, Expression left, String id) {
       super(lineNum);
@@ -23,6 +25,7 @@ public class DotExpression extends AbstractExpression {
          this.struct_name = ((StructType) s).getName();
          Map<String, Type> ty_map = Program.struct_map.get(this.struct_name);
          Type ret = ty_map.get(id);
+         this.result_type = ret;
          if (ret == null) {
             Program.error("Invalid dot expression line : " + this.getLineNum());
          }
@@ -35,8 +38,10 @@ public class DotExpression extends AbstractExpression {
    public LLVMValue get_llvm(BasicBlock cur) {
       LLVMValue l = left.get_llvm(cur);
       int index = Program.naive_struct_map.get(this.struct_name).indexOf(id);
-      GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(index));
+      GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(index), result_type.to_llvm());
+      LoadInstruction d = new LoadInstruction(g.getReg().get_name(), g.getReg().get_type());
       cur.add_instruction(g);
-      return g.getReg();
+      cur.add_instruction(d);
+      return d.getReg();
    }
 }

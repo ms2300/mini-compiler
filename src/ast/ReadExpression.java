@@ -1,7 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
-import instructions.CallInstruction;
+import instructions.LoadInstruction;
 import instructions.ReadInstruction;
 import llvm.LLVMValue;
 
@@ -16,11 +16,10 @@ public class ReadExpression extends AbstractExpression {
    public Type static_type_check(Map<String, TypeScope> local_map) { return new IntType(); }
 
    public LLVMValue get_llvm(BasicBlock cur) {
-      /*
-         PROBABLY WRONG
-       */
       ReadInstruction r = new ReadInstruction();
+      LoadInstruction l = new LoadInstruction("@_read_val_", "i32");
       cur.add_instruction(r);
-      return r.getReg();
+      cur.add_instruction(l);
+      return l.getReg();
    }
 }
