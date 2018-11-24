@@ -35,4 +35,6 @@ public class BasicBlock {
       return label + ": \n" + body;
    }
 
+   public List<Instruction> getInstructions() { return this.instructions; }
+
 }

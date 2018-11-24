@@ -7,6 +7,7 @@ import instructions.BranchInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class WhileStatement extends AbstractStatement {
@@ -26,8 +27,8 @@ public class WhileStatement extends AbstractStatement {
       return body.static_type_check(ret_type, local_map);
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
-      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
+      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       LLVMValue gx = guard.get_llvm(cur);
       BranchConditional br_c = new BranchConditional(gx, body_block.getLabel(), join.getLabel());
@@ -48,7 +49,9 @@ public class WhileStatement extends AbstractStatement {
          guard_block.add_desc(body_block);
          guard_block.add_desc(join);
          join.add_pred(guard_block);
+         blocks.add(guard_block);
       }
+      blocks.add(join);
       return join;
    }
 }

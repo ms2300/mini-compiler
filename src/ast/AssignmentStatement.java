@@ -5,6 +5,7 @@ import instructions.StoreInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class AssignmentStatement extends AbstractStatement {
@@ -29,7 +30,7 @@ public class AssignmentStatement extends AbstractStatement {
       return new VoidType();
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       Register left = target.ref_llvm(cur);
       LLVMValue right = source.get_llvm(cur);
       StoreInstruction st = new StoreInstruction(left.get_type(), right, left);

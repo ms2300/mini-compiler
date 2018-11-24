@@ -7,6 +7,7 @@ import instructions.BranchInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class ConditionalStatement extends AbstractStatement {
@@ -31,24 +32,24 @@ public class ConditionalStatement extends AbstractStatement {
       return null;
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       /*
          There might be problems with returns from conditions here
        */
-      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
-      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val);
+      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
+      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
       LLVMValue gx = guard.get_llvm(cur);
       BranchConditional br_c = new BranchConditional(gx, then_flow.getLabel(), else_flow.getLabel());
       cur.add_instruction(br_c);
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       BranchInstruction br_a = new BranchInstruction(join.getLabel());
-      then_flow.add_instruction(br_a);
-      else_flow.add_instruction(br_a);
       if (!(then_flow.getDesc().size() > 0)) {
+         then_flow.add_instruction(br_a);
          join.add_pred(then_flow);
          then_flow.add_desc(join);
       }
       if (!(else_flow.getDesc().size() > 0)) {
+         else_flow.add_instruction(br_a);
          join.add_pred(else_flow);
          else_flow.add_desc(join);
       }
@@ -56,6 +57,9 @@ public class ConditionalStatement extends AbstractStatement {
       else_flow.add_pred(cur);
       cur.add_desc(then_flow);
       cur.add_desc(else_flow);
+      blocks.add(then_flow);
+      blocks.add(else_flow);
+      blocks.add(join);
       return join;
    }
 }

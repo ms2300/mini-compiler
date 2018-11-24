@@ -6,7 +6,6 @@ import ast.Type;
 import ast.VoidType;
 import instructions.AllocInstruction;
 import instructions.StoreInstruction;
-import llvm.LLVMValue;
 import llvm.Register;
 
 import java.util.List;
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 public class FunctionCFG {
    private BasicBlock enter;
    private BasicBlock exit;
+   private List<BasicBlock> blocks;
    private String llvm_name;
    private final String name;
    private final List<Declaration> params;
@@ -36,8 +36,10 @@ public class FunctionCFG {
       Register ret_r = new Register(retType.to_llvm(), Optional.of("%__retval__"));
       this.enter = new BasicBlock("Entry");
       this.exit = new BasicBlock("Exit");
+      this.blocks.add(enter);
       this.declare_func();
-      BasicBlock fin = body.make_cfg(enter, exit, ret_r);
+      BasicBlock fin = body.make_cfg(enter, exit, ret_r, blocks);
+      this.blocks.add(exit);
       if (fin != exit) {
          exit.add_pred(fin);
          fin.add_desc(exit);
@@ -68,4 +70,7 @@ public class FunctionCFG {
          this.enter.add_instruction(s);
       });
    }
+
+   public String getLlvm_name() { return this.llvm_name; }
+   public List<BasicBlock> getBlocks() { return this.blocks; }
 }

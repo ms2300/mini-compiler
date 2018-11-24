@@ -5,6 +5,7 @@ import instructions.BranchInstruction;
 import instructions.ReturnVoidInstruction;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class ReturnEmptyStatement extends AbstractStatement {
@@ -20,7 +21,7 @@ public class ReturnEmptyStatement extends AbstractStatement {
       return ret_type;
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       BranchInstruction b = new BranchInstruction(end.getLabel());
       cur.add_instruction(b);
       ReturnVoidInstruction r = new ReturnVoidInstruction();

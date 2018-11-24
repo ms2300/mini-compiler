@@ -31,12 +31,12 @@ public class BlockStatement extends AbstractStatement {
       return new VoidType();
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       for (Statement s : statements) {
          if (s instanceof ReturnEmptyStatement || s instanceof ReturnStatement) {
-            return s.make_cfg(cur, end, ret_val);
+            return s.make_cfg(cur, end, ret_val, blocks);
          }
-         cur = s.make_cfg(cur, end, ret_val);
+         cur = s.make_cfg(cur, end, ret_val, blocks);
       }
       return cur;
    }

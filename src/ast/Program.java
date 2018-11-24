@@ -63,4 +63,6 @@ public class Program {
    }
 
    public List<Function> getFuncs() { return funcs; }
+   public List<Declaration> getDecls() { return decls; }
+   public List<TypeDeclaration> getTypes() { return this.types; }
 }

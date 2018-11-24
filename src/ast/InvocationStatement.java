@@ -3,6 +3,7 @@ package ast;
 import cfg.BasicBlock;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class InvocationStatement extends AbstractStatement {
@@ -16,7 +17,7 @@ public class InvocationStatement extends AbstractStatement {
       return expression.static_type_check(local_map);
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       expression.get_llvm(cur);
       return cur;
    }

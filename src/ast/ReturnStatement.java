@@ -8,6 +8,7 @@ import instructions.StoreInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class ReturnStatement extends AbstractStatement {
@@ -25,7 +26,7 @@ public class ReturnStatement extends AbstractStatement {
       return ret_type;
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       LLVMValue reg = expression.get_llvm(cur);
       StoreInstruction s = new StoreInstruction(reg.get_type(), reg, ret_val);
       BranchInstruction b = new BranchInstruction(end.getLabel());

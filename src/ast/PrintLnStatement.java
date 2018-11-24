@@ -5,6 +5,7 @@ import instructions.PrintInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class PrintLnStatement extends AbstractStatement {
@@ -20,7 +21,7 @@ public class PrintLnStatement extends AbstractStatement {
       return new VoidType();
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       LLVMValue pr = expression.get_llvm(cur);
       PrintInstruction p = new PrintInstruction(pr, true);
       cur.add_instruction(p);

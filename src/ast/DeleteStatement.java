@@ -6,6 +6,7 @@ import instructions.CallInstruction;
 import llvm.LLVMValue;
 import llvm.Register;
 
+import java.util.List;
 import java.util.Map;
 
 public class DeleteStatement extends AbstractStatement {
@@ -24,7 +25,7 @@ public class DeleteStatement extends AbstractStatement {
       return del;
    }
 
-   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val) {
+   public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       LLVMValue r = expression.get_llvm(cur);
       BitcastInstruction b = new BitcastInstruction(r, r.get_name(), "i8");
       CallInstruction c = new CallInstruction("void", "@free", b.getReg().get_name());

@@ -1,4 +1,5 @@
 import ast.Function;
+import cfg.CfgToLLVM;
 import cfg.FunctionCFG;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
@@ -22,6 +23,8 @@ public class MiniCompiler {
       ast.Program program = programVisitor.visit(tree);
       program.static_type_check();
       List<FunctionCFG> cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
+      String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
+      System.out.println(llvm_gen);
    }
 
    private static String _inputFile = null;
