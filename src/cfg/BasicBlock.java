@@ -14,6 +14,7 @@ public class BasicBlock {
 
    public BasicBlock(String label) {
       this.label = label;
+      instructions = new ArrayList<>();
       desc = new ArrayList<>();
       pred = new ArrayList<>();
       visit = true;

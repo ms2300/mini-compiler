@@ -8,6 +8,7 @@ import instructions.AllocInstruction;
 import instructions.StoreInstruction;
 import llvm.Register;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class FunctionCFG {
       this.locals = locals;
       this.retType = retType;
       this.body = body;
+      this.blocks = new ArrayList<>();
       createCFG();
    }
 

@@ -22,6 +22,7 @@ public class MiniCompiler {
       MiniToAstProgramVisitor programVisitor = new MiniToAstProgramVisitor();
       ast.Program program = programVisitor.visit(tree);
       program.static_type_check();
+      System.out.println("Static Type Checking Passed");
       List<FunctionCFG> cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
       String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
       System.out.println(llvm_gen);
