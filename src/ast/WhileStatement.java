@@ -51,6 +51,7 @@ public class WhileStatement extends AbstractStatement {
          join.add_pred(guard_block);
          blocks.add(guard_block);
       }
+      blocks.add(body_block);
       blocks.add(join);
       return join;
    }

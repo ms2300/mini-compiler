@@ -13,10 +13,10 @@ public class BitcastInstruction extends AbstractInstruction {
 
    public BitcastInstruction(LLVMValue value, String ty1, String ty2) {
       super("bitcast");
-      this.reg = new Register("i1", Optional.empty());
       this.value = value;
       this.ty1 = ty1;
       this.ty2 = ty2;
+      this.reg = new Register(this.ty2, Optional.empty());
    }
 
    public String toString() {

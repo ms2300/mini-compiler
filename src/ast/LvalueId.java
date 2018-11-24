@@ -31,21 +31,20 @@ public class LvalueId implements Lvalue {
       return null;
    }
 
-   public Register ref_llvm(BasicBlock cur) {
+   public String ref_llvm(BasicBlock cur) {
       TypeScope ty_scope;
-      LoadInstruction l;
+      String l;
       if (Program.var_map.containsKey(id)) {
          ty_scope = Program.var_map.get(id);
-         l = new LoadInstruction("@" + id, ty_scope.getTy().to_llvm());
+         l = "@" + id;
       } else {
          ty_scope = this.local_map.get(id);
          if (ty_scope.getScope() == TypeScope.Scope.Param) {
-            l = new LoadInstruction("%_P_" + id, ty_scope.getTy().to_llvm());
+            l = "%_P_" + id;
          } else {
-            l = new LoadInstruction("%" + id, ty_scope.getTy().to_llvm());
+            l = "%" + id;
          }
       }
-      cur.add_instruction(l);
-      return l.getReg();
+      return l;
    }
 }

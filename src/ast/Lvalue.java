@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface Lvalue {
    Type static_type_check(Map<String, TypeScope> local_map);
-   Register ref_llvm(BasicBlock cur);
+   String ref_llvm(BasicBlock cur);
 }

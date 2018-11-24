@@ -27,8 +27,8 @@ public class DeleteStatement extends AbstractStatement {
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       LLVMValue r = expression.get_llvm(cur);
-      BitcastInstruction b = new BitcastInstruction(r, r.get_name(), "i8");
-      CallInstruction c = new CallInstruction("void", "@free", b.getReg().get_name());
+      BitcastInstruction b = new BitcastInstruction(r, r.get_name(), "i8*");
+      CallInstruction c = new CallInstruction("void", "@free", "(i8* " + b.getReg().get_name() + ")");
       cur.add_instruction(b);
       cur.add_instruction(c);
       return cur;

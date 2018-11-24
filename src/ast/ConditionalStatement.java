@@ -33,9 +33,7 @@ public class ConditionalStatement extends AbstractStatement {
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
-      /*
-         There might be problems with returns from conditions here
-       */
+      int flag = 0;
       BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
       BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
       LLVMValue gx = guard.get_llvm(cur);
@@ -44,11 +42,13 @@ public class ConditionalStatement extends AbstractStatement {
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       BranchInstruction br_a = new BranchInstruction(join.getLabel());
       if (!(then_flow.getDesc().size() > 0)) {
+         flag++;
          then_flow.add_instruction(br_a);
          join.add_pred(then_flow);
          then_flow.add_desc(join);
       }
       if (!(else_flow.getDesc().size() > 0)) {
+         flag++;
          else_flow.add_instruction(br_a);
          join.add_pred(else_flow);
          else_flow.add_desc(join);
@@ -59,7 +59,9 @@ public class ConditionalStatement extends AbstractStatement {
       cur.add_desc(else_flow);
       blocks.add(then_flow);
       blocks.add(else_flow);
-      blocks.add(join);
+      if (flag != 0) {
+         blocks.add(join);
+      }
       return join;
    }
 }

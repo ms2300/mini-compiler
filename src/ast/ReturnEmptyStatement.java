@@ -24,10 +24,12 @@ public class ReturnEmptyStatement extends AbstractStatement {
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       BranchInstruction b = new BranchInstruction(end.getLabel());
       cur.add_instruction(b);
-      ReturnVoidInstruction r = new ReturnVoidInstruction();
-      end.add_instruction(r);
+      if (end.getInstructions().size() == 0) {
+         ReturnVoidInstruction r = new ReturnVoidInstruction();
+         end.add_instruction(r);
+      }
       end.add_pred(cur);
       cur.add_desc(end);
-      return end;
+      return cur;
    }
 }

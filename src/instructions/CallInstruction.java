@@ -12,14 +12,21 @@ public class CallInstruction extends AbstractInstruction {
 
    public CallInstruction(String ret_ty, String func_name, String param_string) {
       super("call");
-      this.reg = new Register(ret_ty, Optional.empty());
+      if (!ret_ty.equals("void")) {
+         this.reg = new Register(ret_ty, Optional.empty());
+      } else {
+         this.reg = null;
+      }
       this.ret_ty = ret_ty;
       this.func_name = func_name;
       this.param_string = param_string;
    }
 
    public String toString() {
-      return reg.get_name() + " = " + this.getOp_code() + " " + this.ret_ty + " " + this.func_name + this.param_string;
+      if (ret_ty.equals("void")) {
+         return this.getOp_code() + " " + this.ret_ty + " " + this.func_name + this.param_string;
+      }
+      return this.reg.get_name() + " = " + this.getOp_code() + " " + this.ret_ty + " " + this.func_name + this.param_string;
    }
    public Register getReg() { return this.reg; }
 }

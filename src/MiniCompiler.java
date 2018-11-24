@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.stream.Collectors;
 
 public class MiniCompiler {
-   public static void main(String[] args) {
+   public static void main(String[] args) throws FileNotFoundException {
       parseParameters(args);
 
       CommonTokenStream tokens = new CommonTokenStream(createLexer());
@@ -24,17 +24,27 @@ public class MiniCompiler {
       program.static_type_check();
       System.out.println("Static Type Checking Passed");
       List<FunctionCFG> cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
-      String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
-      System.out.println(llvm_gen);
+      if (_outputLLVM) {
+         System.out.println("Printing generated LLVM");
+         String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
+         PrintWriter writer = new PrintWriter(_inputFile.split("\\.")[0] + ".ll");
+         writer.println(llvm_gen);
+         writer.close();
+      }
    }
 
    private static String _inputFile = null;
+   private static boolean _outputLLVM = false;
 
    private static void parseParameters(String [] args) {
       for (int i = 0; i < args.length; i++) {
          if (args[i].charAt(0) == '-') {
-            System.err.println("unexpected option: " + args[i]);
-            System.exit(1);
+            if (args[i].equals("-stack")) {
+               _outputLLVM = true;
+            } else {
+               System.err.println("unexpected option: " + args[i]);
+               System.exit(1);
+            }
          } else if (_inputFile != null) {
             System.err.println("too many files specified");
             System.exit(1);

@@ -33,11 +33,11 @@ public class LvalueDot implements Lvalue {
       return null;
    }
 
-   public Register ref_llvm(BasicBlock cur) {
+   public String ref_llvm(BasicBlock cur) {
       LLVMValue l = left.get_llvm(cur);
       int index = Program.naive_struct_map.get(this.struct_name).indexOf(id);
       GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(index));
       cur.add_instruction(g);
-      return g.getReg();
+      return g.getReg().get_name();
    }
 }

@@ -16,7 +16,7 @@ public class BranchConditional extends AbstractInstruction {
    }
 
    public String toString() {
-      return this.getOp_code() + " i1 " + cond.get_name() + ", label " + iftrue + ", label " + iffalse;
+      return this.getOp_code() + " i1 " + cond.get_name() + ", label %" + iftrue + ", label %" + iffalse;
    }
    public Register getReg() { return null; }
 }

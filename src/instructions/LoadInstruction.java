@@ -12,7 +12,7 @@ public class LoadInstruction extends AbstractInstruction {
    public LoadInstruction(String label, String ty) {
       super("load");
       this.ty = ty;
-      this.reg = new Register("i32", Optional.empty());
+      this.reg = new Register(this.ty, Optional.empty());
       this.label = label;
    }
 

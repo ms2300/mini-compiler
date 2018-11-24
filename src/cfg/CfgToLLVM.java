@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 public class CfgToLLVM {
    public static String process_cfgs(List<FunctionCFG> cfgs, Program program) {
-      String header = "target triple='i686'\n";
+      String header = "target triple=\"i686\"\n";
       String structs = program.getTypes().stream().map(CfgToLLVM::process_type).collect(Collectors.joining("\n")) + "\n";
-      String globals = program.getDecls().stream().map(CfgToLLVM::process_global).collect(Collectors.joining("\n")) + "\n";
+      String globals = program.getDecls().stream().map(CfgToLLVM::process_global).collect(Collectors.joining("\n")) + "\n\n";
       String body = cfgs.stream().map(CfgToLLVM::process_cfg).collect(Collectors.joining("\n")) + "\n";
       String footer =
             "declare i8* @malloc(i32)\n" +
@@ -27,7 +27,7 @@ public class CfgToLLVM {
 
    public static String process_cfg(FunctionCFG cfg) {
       String blocks = cfg.getBlocks().stream().map(CfgToLLVM::process_block).collect(Collectors.joining("\n"));
-      return cfg.getLlvm_name() + "\n{\n" + blocks + "}\n";
+      return cfg.getLlvm_name() + "\n{\n" + blocks + "\n}\n";
    }
 
    public static String process_block(BasicBlock cur) {
@@ -38,10 +38,10 @@ public class CfgToLLVM {
 
    public static String process_type(TypeDeclaration t) {
       String fields = t.getFields().stream().map(x -> x.getType().to_llvm()).collect(Collectors.joining(","));
-      return "%struct." + t.getName() + " = {" + fields + "}";
+      return "%struct." + t.getName() + " = type {" + fields + "}";
    }
 
    public static String process_global(Declaration d) {
-      return "@" + d.getName() + " = common global " + d.getType() + " null, align 8";
+      return "@" + d.getName() + " = common global " + d.getType().to_llvm() + " null, align 8";
    }
 }
