@@ -14,6 +14,7 @@ public class LoadInstruction extends AbstractInstruction {
       this.ty = ty;
       this.reg = new Register(this.ty, Optional.empty());
       this.label = label;
+      reg.set_def(this);
    }
 
    public String toString() { return reg.get_name() + " = " + this.getOp_code() + " " + this.ty + "* " + label; }

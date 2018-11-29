@@ -19,6 +19,8 @@ public class GetPtrInstruction extends AbstractInstruction {
       this.reg = new Register(this.result_ty, Optional.empty());
       this.value = value;
       this.index = index;
+      reg.set_def(this);
+      value.add_use(this);
    }
 
    public String toString() {

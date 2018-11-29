@@ -10,13 +10,14 @@ public class PrintInstruction implements Instruction {
    public PrintInstruction(LLVMValue value, Boolean println) {
       this.value = value;
       this.println = println;
+      value.add_use(this);
    }
 
    public String toString() {
       if (this.println) {
          return "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([5 x i8]* @.println, i32 0, i32 0), i32 " + this.value.get_name() + ")";
       } else {
-         return "NOT IMPLEMENTED DUMB DUMB";
+         return "call i32 (i8*, ...)* @printf(i8* getelementptr inbounds ([5 x i8]* @.println, i32 0, i32 0), i32 " + this.value.get_name() + ")";
       }
    }
 

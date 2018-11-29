@@ -15,10 +15,13 @@ public class CmpInstruction extends AbstractInstruction {
    public CmpInstruction(String cond, String ty, LLVMValue op1, LLVMValue op2) {
       super("icmp");
       this.ty = ty;
-      this.reg = new Register("i32", Optional.empty());
+      this.reg = new Register("i1", Optional.empty());
       this.cond = cond;
       this.op1 = op1;
       this.op2 = op2;
+      op1.add_use(this);
+      op2.add_use(this);
+      reg.set_def(this);
    }
 
    public String toString() {

@@ -2,6 +2,7 @@ package cfg;
 
 import ast.Declaration;
 import ast.Program;
+import ast.StructType;
 import ast.TypeDeclaration;
 
 import java.util.List;
@@ -42,6 +43,9 @@ public class CfgToLLVM {
    }
 
    public static String process_global(Declaration d) {
-      return "@" + d.getName() + " = common global " + d.getType().to_llvm() + " null, align 8";
+      if (d.getType() instanceof StructType) {
+         return "@" + d.getName() + " = common global " + d.getType().to_llvm() + " null, align 8";
+      }
+      return "@" + d.getName() + " =  global " + d.getType().to_llvm() + " 0";
    }
 }

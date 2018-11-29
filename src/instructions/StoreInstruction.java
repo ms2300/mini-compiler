@@ -13,6 +13,7 @@ public class StoreInstruction extends AbstractInstruction {
       this.ty = ty;
       this.val_a = val_a;
       this.val_b = val_b;
+      val_a.add_use(this);
    }
 
    public String toString() {

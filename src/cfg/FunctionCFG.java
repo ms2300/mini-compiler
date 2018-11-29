@@ -59,7 +59,7 @@ public class FunctionCFG {
    private void declare_func() {
       String param_string = this.params.stream()
             .map(param -> param.getType().to_llvm() + " %" + param.getName())
-            .collect(Collectors.joining(","));
+            .collect(Collectors.joining(", "));
       this.llvm_name = "define " + retType.to_llvm() + " @" + name + "(" + param_string + ")";
       if (!(retType instanceof VoidType)) {
          AllocInstruction a = new AllocInstruction("%_retval_", retType.to_llvm());

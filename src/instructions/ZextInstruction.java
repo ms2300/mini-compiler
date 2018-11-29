@@ -13,6 +13,8 @@ public class ZextInstruction extends AbstractInstruction {
       super("zext");
       this.reg = new Register("i1", Optional.empty());
       this.value = value;
+      reg.set_def(this);
+      value.add_use(this);
    }
 
    public String toString() {

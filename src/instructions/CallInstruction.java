@@ -14,6 +14,7 @@ public class CallInstruction extends AbstractInstruction {
       super("call");
       if (!ret_ty.equals("void")) {
          this.reg = new Register(ret_ty, Optional.empty());
+         reg.set_def(this);
       } else {
          this.reg = null;
       }

@@ -17,6 +17,8 @@ public class BitcastInstruction extends AbstractInstruction {
       this.ty1 = ty1;
       this.ty2 = ty2;
       this.reg = new Register(this.ty2, Optional.empty());
+      reg.set_def(this);
+      value.add_use(this);
    }
 
    public String toString() {

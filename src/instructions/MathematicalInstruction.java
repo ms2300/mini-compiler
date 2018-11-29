@@ -17,6 +17,9 @@ public class MathematicalInstruction extends AbstractInstruction {
       this.reg = new Register(this.ty, Optional.empty());
       this.op1 = op1;
       this.op2 = op2;
+      op1.add_use(this);
+      op2.add_use(this);
+      reg.set_def(this);
    }
 
    public String toString() {
