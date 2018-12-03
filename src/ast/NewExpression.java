@@ -17,7 +17,7 @@ public class NewExpression extends AbstractExpression {
 
    public Type static_type_check(Map<String, TypeScope> local_map) {
       if (Program.struct_map.containsKey(id)) {
-         return Program.var_map.get(id).getTy();
+         return new StructType(-1, id);
       }
       Program.error("Invalid new expression line : " + this.getLineNum());
       return null;
@@ -28,7 +28,7 @@ public class NewExpression extends AbstractExpression {
          NEED TO GET SIZE >>> ASK KEEN
        */
       CallInstruction c = new CallInstruction("i8*", "@malloc", "(i32 24)");
-      BitcastInstruction b = new BitcastInstruction(c.getReg(), "i8*", Program.var_map.get(id).getTy().to_llvm());
+      BitcastInstruction b = new BitcastInstruction(c.getReg(), "i8*", "%struct." + id + "*");
       cur.add_instruction(c);
       cur.add_instruction(b);
       return b.getReg();

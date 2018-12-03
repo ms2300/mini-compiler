@@ -14,6 +14,7 @@ public class LvalueDot implements Lvalue {
    private final Expression left;
    private final String id;
    private String struct_name;
+   private String reg_type;
    private Type result_type;
 
    public LvalueDot(int lineNum, Expression left, String id) {
@@ -42,6 +43,9 @@ public class LvalueDot implements Lvalue {
       List<String> indices = Program.naive_struct_map.get(this.struct_name);
       GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(indices.indexOf(id)), result_type.to_llvm());
       cur.add_instruction(g);
+      this.reg_type = g.getReg().get_type();
       return g.getReg().get_name();
    }
+
+   public String getReg_type() { return this.reg_type; }
 }

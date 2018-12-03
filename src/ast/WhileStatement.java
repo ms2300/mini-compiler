@@ -28,30 +28,35 @@ public class WhileStatement extends AbstractStatement {
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
-      BasicBlock body_block = body.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
+      BasicBlock body_block = new BasicBlock(Label.nextBlockLabel());
+      BasicBlock body_flow = body.make_cfg(body_block, end, ret_val, blocks);
+      if (!body_block.equals(body_flow)) {
+         blocks.add(body_block);
+      } else {
+         blocks.add(body_flow);
+      }
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       LLVMValue gx = guard.get_llvm(cur);
-      BranchConditional br_c = new BranchConditional(gx, body_block.getLabel(), join.getLabel());
+      BranchConditional br_c = new BranchConditional(gx, body_flow.getLabel(), join.getLabel());
       cur.add_instruction(br_c);
       cur.add_desc(body_block);
       body_block.add_pred(cur);
       cur.add_desc(join);
       join.add_pred(cur);
-      if (!(body_block.getDesc().size() > 0)) {
-         BasicBlock guard_block = new BasicBlock(Label.nextBlockLabel());
-         LLVMValue gx_b = guard.get_llvm(guard_block);
-         BranchConditional br_g = new BranchConditional(gx_b, body_block.getLabel(), join.getLabel());
-         guard_block.add_instruction(br_g);
-         BranchInstruction bb_g = new BranchInstruction(guard_block.getLabel());
-         body_block.add_instruction(bb_g);
-         body_block.add_desc(guard_block);
-         body_block.add_pred(guard_block);
-         guard_block.add_desc(body_block);
-         guard_block.add_desc(join);
-         join.add_pred(guard_block);
-         blocks.add(guard_block);
+      if (!(body_flow.getDesc().size() > 0)) {
+         body_block.add_pred(body_flow);
+         body_flow.add_desc(body_block);
+         join.add_pred(body_flow);
+         body_flow.add_desc(join);
+         body_block.seal_block();
+         body_flow.seal_block();
+         LLVMValue gx2 = guard.get_llvm(body_flow);
+         BranchConditional br_c2 = new BranchConditional(gx2, body_block.getLabel(), join.getLabel());
+         body_flow.add_instruction(br_c2);
       }
-      blocks.add(body_block);
+      body_block.seal_block();
+      body_flow.seal_block();
+      join.seal_block();
       blocks.add(join);
       return join;
    }

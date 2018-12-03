@@ -8,6 +8,7 @@ import instructions.AllocInstruction;
 import instructions.BranchInstruction;
 import instructions.ReturnVoidInstruction;
 import instructions.StoreInstruction;
+import llvm.LLVMValue;
 import llvm.Register;
 
 import java.util.ArrayList;
@@ -38,8 +39,8 @@ public class FunctionCFG {
 
    private void createCFG() {
       Register ret_r = new Register(retType.to_llvm(), Optional.of("%_retval_"));
-      this.enter = new BasicBlock("Entry");
-      this.exit = new BasicBlock("Exit");
+      this.exit = new BasicBlock(Label.nextBlockLabel());
+      this.enter = new BasicBlock(Label.nextBlockLabel());
       this.blocks.add(enter);
       this.declare_func();
       BasicBlock fin = body.make_cfg(enter, exit, ret_r, blocks);
@@ -61,24 +62,34 @@ public class FunctionCFG {
             .map(param -> param.getType().to_llvm() + " %" + param.getName())
             .collect(Collectors.joining(", "));
       this.llvm_name = "define " + retType.to_llvm() + " @" + name + "(" + param_string + ")";
+      this.params.stream().forEach(p -> {
+         LLVMValue reg = new Register(p.getType().to_llvm(), Optional.of("%" + p.getName()));
+         enter.write_value(p.getName(), reg);
+      });
+      /*
       if (!(retType instanceof VoidType)) {
          AllocInstruction a = new AllocInstruction("%_retval_", retType.to_llvm());
          this.enter.add_instruction(a);
       }
+      */
+      /*
       this.params.stream().forEach(p -> {
          AllocInstruction a = new AllocInstruction("%_P_" + p.getName(), p.getType().to_llvm());
          this.enter.add_instruction(a);
       });
+      */
       this.locals.stream().forEach(l -> {
          AllocInstruction a = new AllocInstruction("%" + l.getName(), l.getType().to_llvm());
          this.enter.add_instruction(a);
       });
+      /*
       this.params.stream().forEach(p -> {
          Register r1 = new Register(p.getType().to_llvm(), Optional.of("%" + p.getName()));
          Register r2 = new Register(p.getType().to_llvm(), Optional.of("%_P_" + p.getName()));
          StoreInstruction s = new StoreInstruction(p.getType().to_llvm(), r1, r2.get_name());
          this.enter.add_instruction(s);
       });
+      */
    }
 
    public String getLlvm_name() { return this.llvm_name; }

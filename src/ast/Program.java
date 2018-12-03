@@ -23,9 +23,6 @@ public class Program {
       Map<String, TypeScope> var_map = new HashMap<>();
       AtomicBoolean has_main = new AtomicBoolean();
       decls.forEach(decl -> var_map.put(decl.getName(), new TypeScope(decl.getType(), TypeScope.Scope.Global)));
-      types.forEach(type -> var_map.put(type.getName(),
-                      new TypeScope(new StructType(-1, type.getName()), TypeScope.Scope.Global))
-      );
       funcs.forEach(func -> {
                   if (func.getName().equals("main")) { has_main.set(true); }
                   var_map.put(func.getName(),

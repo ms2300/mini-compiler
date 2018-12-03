@@ -34,10 +34,16 @@ public class ConditionalStatement extends AbstractStatement {
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       int flag = 0;
-      BasicBlock then_flow = thenBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
-      BasicBlock else_flow = elseBlock.make_cfg(new BasicBlock(Label.nextBlockLabel()), end, ret_val, blocks);
+      BasicBlock then_block = new BasicBlock(Label.nextBlockLabel());
+      BasicBlock else_block = new BasicBlock(Label.nextBlockLabel());
+      BasicBlock then_flow = thenBlock.make_cfg(then_block, end, ret_val, blocks);
+      BasicBlock else_flow = elseBlock.make_cfg(else_block, end, ret_val, blocks);
+      if (!blocks.contains(then_block)) { blocks.add(then_block); }
+      //if (!blocks.contains(then_flow)) { blocks.add(then_flow); }
+      if (!blocks.contains(else_block)) { blocks.add(else_block); }
+      //if (!blocks.contains(else_flow)) { blocks.add(else_flow); }
       LLVMValue gx = guard.get_llvm(cur);
-      BranchConditional br_c = new BranchConditional(gx, then_flow.getLabel(), else_flow.getLabel());
+      BranchConditional br_c = new BranchConditional(gx, then_block.getLabel(), else_block.getLabel());
       cur.add_instruction(br_c);
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       BranchInstruction br_a = new BranchInstruction(join.getLabel());
@@ -53,15 +59,19 @@ public class ConditionalStatement extends AbstractStatement {
          join.add_pred(else_flow);
          else_flow.add_desc(join);
       }
-      then_flow.add_pred(cur);
-      else_flow.add_pred(cur);
-      cur.add_desc(then_flow);
-      cur.add_desc(else_flow);
-      blocks.add(then_flow);
-      blocks.add(else_flow);
+      then_block.add_pred(cur);
+      else_block.add_pred(cur);
+      cur.add_desc(then_block);
+      cur.add_desc(else_block);
+      then_block.seal_block();
+      then_flow.seal_block();
+      else_block.seal_block();
+      else_flow.seal_block();
+      join.seal_block();
       if (flag != 0) {
          blocks.add(join);
+         return join;
       }
-      return join;
+      return cur;
    }
 }

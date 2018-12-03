@@ -77,10 +77,11 @@ public class BinaryExpression extends AbstractExpression {
             }
             break;
          case LT: case GT: case LE: case GE: case EQ: case NE:
+            Type rt = right.static_type_check(local_map);
             if ((left.static_type_check(local_map) instanceof IntType &&
-                  right.static_type_check(local_map) instanceof IntType) ||
+                  (rt instanceof IntType || rt instanceof VoidType)) ||
                 (left.static_type_check(local_map) instanceof StructType &&
-                  right.static_type_check(local_map) instanceof StructType)) {
+                      (rt instanceof StructType || rt instanceof VoidType))) {
                return new BoolType();
             }
             break;
@@ -140,13 +141,13 @@ public class BinaryExpression extends AbstractExpression {
             //cur.add_instruction(z);
             return c.getReg();
          } case EQ: {
-            CmpInstruction c = new CmpInstruction("eq", "i32", op1, op2);
+            CmpInstruction c = new CmpInstruction("eq", op1.get_type(), op1, op2);
             //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
             //cur.add_instruction(z);
             return c.getReg();
          } case NE: {
-            CmpInstruction c = new CmpInstruction("ne", "i32", op1, op2);
+            CmpInstruction c = new CmpInstruction("ne", op1.get_type(), op1, op2);
             //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
             //cur.add_instruction(z);
