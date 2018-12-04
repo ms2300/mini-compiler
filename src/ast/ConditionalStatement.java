@@ -39,9 +39,7 @@ public class ConditionalStatement extends AbstractStatement {
       BasicBlock then_flow = thenBlock.make_cfg(then_block, end, ret_val, blocks);
       BasicBlock else_flow = elseBlock.make_cfg(else_block, end, ret_val, blocks);
       if (!blocks.contains(then_block)) { blocks.add(then_block); }
-      //if (!blocks.contains(then_flow)) { blocks.add(then_flow); }
       if (!blocks.contains(else_block)) { blocks.add(else_block); }
-      //if (!blocks.contains(else_flow)) { blocks.add(else_flow); }
       LLVMValue gx = guard.get_llvm(cur);
       BranchConditional br_c = new BranchConditional(gx, then_block.getLabel(), else_block.getLabel());
       cur.add_instruction(br_c);

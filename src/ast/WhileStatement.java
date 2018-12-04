@@ -37,7 +37,7 @@ public class WhileStatement extends AbstractStatement {
       }
       BasicBlock join = new BasicBlock(Label.nextBlockLabel());
       LLVMValue gx = guard.get_llvm(cur);
-      BranchConditional br_c = new BranchConditional(gx, body_flow.getLabel(), join.getLabel());
+      BranchConditional br_c = new BranchConditional(gx, body_block.getLabel(), join.getLabel());
       cur.add_instruction(br_c);
       cur.add_desc(body_block);
       body_block.add_pred(cur);

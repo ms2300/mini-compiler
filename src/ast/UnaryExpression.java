@@ -59,9 +59,6 @@ public class UnaryExpression extends AbstractExpression {
             cur.add_instruction(c);
             return c.getReg();
          } case MINUS: {
-            /*
-               INCORRECT
-             */
             LLVMValue op2 = new Immediate("-1", "i32");
             MathematicalInstruction m = new MathematicalInstruction("mul", "i32", op1, op2);
             cur.add_instruction(m);
