@@ -1,6 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
+import cfg.Label;
 import instructions.StoreInstruction;
 import llvm.LLVMNull;
 import llvm.LLVMValue;
@@ -20,22 +21,22 @@ public class AssignmentStatement extends AbstractStatement {
       this.source = source;
    }
 
-   public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
+   public boolean static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
       Type s = source.static_type_check(local_map);
       if (!target.static_type_check(local_map).getClass().equals(s.getClass())) {
          if (s instanceof VoidType) {
-            return new VoidType();
+            return false;
          }
          Program.error("Invalid assignment line : " + this.getLineNum());
       }
       this.local_map = local_map;
-      return new VoidType();
+      return false;
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {
       LLVMValue right = source.get_llvm(cur);
       String left = target.ref_llvm(cur);
-      if (target instanceof LvalueId && !((LvalueId) target).is_global()) {
+      if (target instanceof LvalueId && !((LvalueId) target).is_global() && Label.isSSA()) {
          LvalueId t = (LvalueId) target;
          cur.write_value(t.getId(), right);
       } else {

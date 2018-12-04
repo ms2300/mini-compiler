@@ -22,14 +22,14 @@ public class ConditionalStatement extends AbstractStatement {
       this.elseBlock = elseBlock;
    }
 
-   public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
+   public boolean static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
       if (guard.static_type_check(local_map) instanceof BoolType) {
-         thenBlock.static_type_check(ret_type, local_map);
-         elseBlock.static_type_check(ret_type, local_map);
-         return new VoidType();
+         boolean t = thenBlock.static_type_check(ret_type, local_map);
+         boolean e = elseBlock.static_type_check(ret_type, local_map);
+         return t && e;
       }
       Program.error("Invalid conditional line : " + this.getLineNum());
-      return null;
+      return false;
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {

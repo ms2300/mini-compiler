@@ -20,15 +20,15 @@ public class BlockStatement extends AbstractStatement {
       return new BlockStatement(-1, new ArrayList<>());
    }
 
-   public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
-      /* Cannot .forEach() because need to break */
+   public boolean static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
+      boolean flag = false;
       for (Statement stmnt : statements) {
+         flag = stmnt.static_type_check(ret_type, local_map) || flag;
          if (stmnt instanceof ReturnStatement || stmnt instanceof ReturnEmptyStatement) {
-            return stmnt.static_type_check(ret_type, local_map);
+            return flag;
          }
-         stmnt.static_type_check(ret_type, local_map);
       }
-      return new VoidType();
+      return flag;
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {

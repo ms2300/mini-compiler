@@ -1,6 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
+import cfg.Label;
 import instructions.LoadInstruction;
 import llvm.LLVMValue;
 
@@ -35,7 +36,13 @@ public class IdentifierExpression extends AbstractExpression {
       LoadInstruction l;
       if (this.local_map.containsKey(id)) {
          ty_scope = this.local_map.get(id);
-         return cur.read_value(id, ty_scope.getTy().to_llvm());
+         if (Label.isSSA()) {
+            return cur.read_value(id, ty_scope.getTy().to_llvm());
+         } else if (ty_scope.getScope() == TypeScope.Scope.Param) {
+            l = new LoadInstruction("%_P_" + id, ty_scope.getTy().to_llvm());
+         } else {
+            l = new LoadInstruction("%" + id, ty_scope.getTy().to_llvm());
+         }
       } else {
          ty_scope = Program.var_map.get(id);
          l = new LoadInstruction("@" + id, ty_scope.getTy().to_llvm());

@@ -20,7 +20,7 @@ public class WhileStatement extends AbstractStatement {
       this.body = body;
    }
 
-   public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
+   public boolean static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
       if (!(guard.static_type_check(local_map) instanceof BoolType)) {
          Program.error("Invalid guard to loop line : " + this.getLineNum());
       }

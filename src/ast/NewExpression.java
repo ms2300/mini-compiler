@@ -24,10 +24,8 @@ public class NewExpression extends AbstractExpression {
    }
 
    public LLVMValue get_llvm(BasicBlock cur) {
-      /*
-         NEED TO GET SIZE >>> ASK KEEN
-       */
-      CallInstruction c = new CallInstruction("i8*", "@malloc", "(i32 24)");
+      int size = 24;
+      CallInstruction c = new CallInstruction("i8*", "@malloc", "(i32 " + size + ")");
       BitcastInstruction b = new BitcastInstruction(c.getReg(), "i8*", "%struct." + id + "*");
       cur.add_instruction(c);
       cur.add_instruction(b);

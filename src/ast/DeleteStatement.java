@@ -17,12 +17,12 @@ public class DeleteStatement extends AbstractStatement {
       this.expression = expression;
    }
 
-   public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
+   public boolean static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
       Type del = expression.static_type_check(local_map);
       if (!(del instanceof StructType)) {
          Program.error("Invalid delete statement line : " + this.getLineNum());
       }
-      return del;
+      return false;
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {

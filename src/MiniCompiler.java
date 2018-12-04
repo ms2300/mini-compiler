@@ -1,6 +1,8 @@
 import ast.Function;
+import ast.Program;
 import cfg.CfgToLLVM;
 import cfg.FunctionCFG;
+import cfg.Label;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
@@ -23,24 +25,37 @@ public class MiniCompiler {
       ast.Program program = programVisitor.visit(tree);
       program.static_type_check();
       System.out.println("Static Type Checking Passed");
-      List<FunctionCFG> cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
-      if (_outputLLVM) {
-         System.out.println("Printing generated LLVM");
-         String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
-         PrintWriter writer = new PrintWriter(_inputFile.split("\\.")[0] + ".ll");
-         writer.println(llvm_gen);
-         writer.close();
+      List<FunctionCFG> cfgs = null;
+      if (_outputSSA) {
+         System.out.println("Generating ssa-based LLVM");
+         cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
+         writeFile(cfgs, program);
+      } else if (_outputStack) {
+         System.out.println("Generating stack-based LLVM");
+         Label.setSSA(false);
+         cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
+         writeFile(cfgs, program);
       }
    }
 
    private static String _inputFile = null;
-   private static boolean _outputLLVM = false;
+   private static boolean _outputStack = false;
+   private static boolean _outputSSA = false;
+
+   private static void writeFile(List<FunctionCFG> cfgs, Program program) throws FileNotFoundException {
+      String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
+      PrintWriter writer = new PrintWriter(_inputFile.split("\\.")[0] + ".ll");
+      writer.println(llvm_gen);
+      writer.close();
+   }
 
    private static void parseParameters(String [] args) {
       for (int i = 0; i < args.length; i++) {
          if (args[i].charAt(0) == '-') {
             if (args[i].equals("-stack")) {
-               _outputLLVM = true;
+               _outputStack = true;
+            } else if (args[i].equals("-llvm")) {
+               _outputSSA = true;
             } else {
                System.err.println("unexpected option: " + args[i]);
                System.exit(1);

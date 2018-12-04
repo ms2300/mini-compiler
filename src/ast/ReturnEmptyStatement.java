@@ -14,11 +14,11 @@ public class ReturnEmptyStatement extends AbstractStatement {
       super(lineNum);
    }
 
-   public Type static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
+   public boolean static_type_check(Type ret_type, Map<String, TypeScope> local_map) {
       if (!(ret_type instanceof VoidType)) {
          Program.error("Invalid return statement line : " + this.getLineNum());
       }
-      return ret_type;
+      return true;
    }
 
    public BasicBlock make_cfg(BasicBlock cur, BasicBlock end, Register ret_val, List<BasicBlock> blocks) {

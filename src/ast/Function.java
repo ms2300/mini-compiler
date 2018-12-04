@@ -13,6 +13,7 @@ public class Function {
    private final List<Declaration> params;
    private final List<Declaration> locals;
    private final Statement body;
+   private boolean ssa;
    private Map<String, TypeScope> local_map;
 
    public Function(int lineNum, String name, List<Declaration> params,
@@ -33,20 +34,18 @@ public class Function {
          }
       }
       Map<String, TypeScope> local_map = new HashMap<>();
-      /* Check if param is overwritten */
       locals.forEach(decl -> local_map.put(decl.getName(), new TypeScope(decl.getType(), TypeScope.Scope.Local)));
       params.forEach(decl -> local_map.put(decl.getName(), new TypeScope(decl.getType(), TypeScope.Scope.Param)));
       this.local_map = local_map;
    }
 
    public void static_type_check() {
-      /* Check for return at some point */
-      body.static_type_check(this.retType, this.local_map);
+      if (!body.static_type_check(this.retType, this.local_map) && !(retType instanceof VoidType)) {
+         Program.error("Function " + name + " does not return");
+      }
    }
 
-   public FunctionCFG toCfg() {
-      return new FunctionCFG(name, params, locals, retType, body);
-   }
+   public FunctionCFG toCfg() { return new FunctionCFG(name, params, locals, retType, body); }
 
    public String getName() { return this.name; }
 

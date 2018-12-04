@@ -1,6 +1,7 @@
 package ast;
 
 import cfg.BasicBlock;
+import cfg.Label;
 
 import java.util.Map;
 
@@ -20,7 +21,9 @@ public class LvalueId implements Lvalue {
       this.local_map = local_map;
       if (local_map.containsKey(id)) {
          this.global = false;
-         return local_map.get(id).getTy();
+         Type r = local_map.get(id).getTy();
+         this.reg_type = r.to_llvm();
+         return r;
       } else if (Program.var_map.containsKey(id)) {
          this.global = true;
          Type r = Program.var_map.get(id).getTy();
