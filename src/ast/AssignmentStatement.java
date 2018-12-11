@@ -42,6 +42,9 @@ public class AssignmentStatement extends AbstractStatement {
       } else {
          String type = target.getReg_type();
          StoreInstruction st = new StoreInstruction(type, right, left);
+         if (target instanceof LvalueDot) {
+            ((LvalueDot) target).getReg().add_use(st);
+         }
          cur.add_instruction(st);
       }
       return cur;

@@ -4,6 +4,8 @@ import ast.Declaration;
 import ast.Program;
 import ast.StructType;
 import ast.TypeDeclaration;
+import instructions.Instruction;
+import llvm.Register;
 
 import java.util.List;
 import java.util.Set;

@@ -4,6 +4,7 @@ import ast.Program;
 import instructions.Instruction;
 import instructions.PhiInstruction;
 import llvm.LLVMValue;
+import llvm.Register;
 
 import java.util.*;
 
@@ -42,6 +43,7 @@ public class BasicBlock {
    public void add_instruction(Instruction next) { instructions.add(next); }
 
    public List<BasicBlock> getDesc() { return desc; }
+
    public List<BasicBlock> getPred() { return pred; }
 
    public String getLabel() { return this.label; }
@@ -53,15 +55,6 @@ public class BasicBlock {
    }
 
    public List<Instruction> getInstructions() { return this.instructions; }
-
-   public static int compare(BasicBlock lhs, BasicBlock rhs) {
-      if (lhs.getLabel().equals(rhs.getLabel())) {
-         Program.error("This is wild I'm telling you");
-         return -99999;
-      } else {
-         return lhs.getLabel().compareTo(rhs.getLabel());
-      }
-   }
 
    public void write_value(String left, LLVMValue right) { ssa_map.put(left, right); }
 
@@ -115,5 +108,42 @@ public class BasicBlock {
          instructions.add(0, phi);
          return phi.getReg();
       }
+   }
+
+   public void remove_unused() {
+      while (true) {
+         Instruction empty = this.find_empty();
+         if (empty == null) { return; }
+         this.remove_uses(empty);
+         this.instructions.remove(empty);
+      }
+   }
+
+   private void remove_uses(Instruction x) {
+      for (Instruction y : this.instructions) {
+         Register r = y.getReg();
+         if (r != null) {
+            for (int i = 0; i < r.get_uses().size(); i++) {
+               r.get_uses().remove(x);
+            }
+         }
+      }
+      this.instructions.forEach(y -> {
+         Register r = y.getReg();
+         if (r != null) {
+            for (int i = 0; i < r.get_uses().size(); i++) {
+               r.get_uses().remove(x);
+            }
+         }
+      });
+   }
+
+   private Instruction find_empty() {
+      for (Instruction x : this.instructions) {
+         if (x.getReg() != null && x.getReg().get_uses().size() == 0) {
+            return x;
+         }
+      }
+      return null;
    }
 }

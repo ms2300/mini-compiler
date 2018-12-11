@@ -29,6 +29,7 @@ public class DeleteStatement extends AbstractStatement {
       LLVMValue r = expression.get_llvm(cur);
       BitcastInstruction b = new BitcastInstruction(r, r.get_type(), "i8*");
       CallInstruction c = new CallInstruction("void", "@free", "(i8* " + b.getReg().get_name() + ")");
+      b.getReg().add_use(c);
       cur.add_instruction(b);
       cur.add_instruction(c);
       return cur;

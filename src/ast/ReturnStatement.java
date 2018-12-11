@@ -36,6 +36,7 @@ public class ReturnStatement extends AbstractStatement {
          if (end.getInstructions().size() == 0) {
             PhiInstruction phi = new PhiInstruction(ret_val.get_type(), end, "_ret_val_");
             ReturnInstruction r = new ReturnInstruction(phi.getReg().get_type(), phi.getReg().get_name());
+            phi.getReg().add_use(r);
             phi.add_label(cur.getLabel());
             phi.add_operand(reg);
             end.add_instruction(phi);

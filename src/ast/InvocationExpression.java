@@ -14,11 +14,13 @@ public class InvocationExpression extends AbstractExpression {
    private final String name;
    private final List<Expression> arguments;
    private List<Type> types;
+   private List<LLVMValue> uses;
 
    public InvocationExpression(int lineNum, String name, List<Expression> arguments) {
       super(lineNum);
       this.name = name;
       this.arguments = arguments;
+      this.uses = new ArrayList<>();
    }
 
    public Type static_type_check(Map<String, TypeScope> local_map) {
@@ -52,6 +54,10 @@ public class InvocationExpression extends AbstractExpression {
       if (inv instanceof FuncType) {
          FuncType f = (FuncType) inv;
          CallInstruction c = new CallInstruction(f.getRetType().to_llvm(), "@" + name, this.getLLVMParams(cur));
+         if (!(f.getRetType() instanceof VoidType)) {
+            c.getReg().add_use(c);
+         }
+         uses.forEach(x -> x.add_use(c));
          cur.add_instruction(c);
          return c.getReg();
       }
@@ -63,6 +69,7 @@ public class InvocationExpression extends AbstractExpression {
       List<String> arg_list = new ArrayList<>();
       for (int i = 0; i < arguments.size(); i++) {
          LLVMValue r = arguments.get(i).get_llvm(cur);
+         uses.add(r);
          arg_list.add(types.get(i).to_llvm() + " " + r.get_name());
       }
       String arg_string = arg_list.stream().collect(Collectors.joining(", "));

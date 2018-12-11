@@ -25,13 +25,17 @@ public class PhiInstruction extends AbstractInstruction {
       this.block = block;
       this.ty = ty;
       this.reg = new Register(this.ty, Optional.of("%" + id + Label.nextPhi()));
+      reg.set_def(this);
       this.complete = false;
       operands = new ArrayList<>();
       labels = new ArrayList<>();
    }
 
    public Register getReg() { return this.reg; }
-   public void add_operand(LLVMValue val) { operands.add(val); }
+   public void add_operand(LLVMValue val) {
+      val.add_use(this);
+      operands.add(val);
+   }
    public void add_label(String label) { labels.add(label); }
    public void set_complete() { this.complete = true; }
    public BasicBlock getBlock() { return this.block; }

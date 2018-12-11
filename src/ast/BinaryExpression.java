@@ -118,39 +118,27 @@ public class BinaryExpression extends AbstractExpression {
             return m.getReg();
          } case LE: {
             CmpInstruction c = new CmpInstruction("sle", "i32", op1, op2);
-            //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
-            //cur.add_instruction(z);
             return c.getReg();
          } case LT: {
             CmpInstruction c = new CmpInstruction("slt", "i32", op1, op2);
-            //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
-            //cur.add_instruction(z);
             return c.getReg();
          } case GE: {
             CmpInstruction c = new CmpInstruction("sge", "i32", op1, op2);
-            //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
-            //cur.add_instruction(z);
             return c.getReg();
          } case GT: {
             CmpInstruction c = new CmpInstruction("sgt", "i32", op1, op2);
-            //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
-            //cur.add_instruction(z);
             return c.getReg();
          } case EQ: {
             CmpInstruction c = new CmpInstruction("eq", op1.get_type(), op1, op2);
-            //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
-            //cur.add_instruction(z);
             return c.getReg();
          } case NE: {
             CmpInstruction c = new CmpInstruction("ne", op1.get_type(), op1, op2);
-            //ZextInstruction z = new ZextInstruction(c.getReg());
             cur.add_instruction(c);
-            //cur.add_instruction(z);
             return c.getReg();
          } case OR: {
             MathematicalInstruction m = new MathematicalInstruction("or", "i1", op1, op2);

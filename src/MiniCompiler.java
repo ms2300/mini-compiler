@@ -28,6 +28,10 @@ public class MiniCompiler {
       List<FunctionCFG> cfgs = null;
       if (_outputSSA) {
          System.out.println("Generating ssa-based LLVM");
+         if (_optimizations) {
+            System.out.println("Using optimizations");
+            Label.setOP(true);
+         }
          cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
          writeFile(cfgs, program);
       } else if (_outputStack) {
@@ -41,6 +45,7 @@ public class MiniCompiler {
    private static String _inputFile = null;
    private static boolean _outputStack = false;
    private static boolean _outputSSA = false;
+   private static boolean _optimizations = false;
 
    private static void writeFile(List<FunctionCFG> cfgs, Program program) throws FileNotFoundException {
       String llvm_gen = CfgToLLVM.process_cfgs(cfgs, program);
@@ -56,6 +61,8 @@ public class MiniCompiler {
                _outputStack = true;
             } else if (args[i].equals("-llvm")) {
                _outputSSA = true;
+            } else if (args[i].equals("-opt")) {
+               _optimizations = true;
             } else {
                System.err.println("unexpected option: " + args[i]);
                System.exit(1);

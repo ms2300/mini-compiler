@@ -40,6 +40,7 @@ public class DotExpression extends AbstractExpression {
       int index = Program.naive_struct_map.get(this.struct_name).indexOf(id);
       GetPtrInstruction g = new GetPtrInstruction(l.get_type(), l, Integer.toString(index), result_type.to_llvm());
       LoadInstruction d = new LoadInstruction(g.getReg().get_name(), g.getReg().get_type());
+      g.getReg().add_use(d);
       cur.add_instruction(g);
       cur.add_instruction(d);
       return d.getReg();

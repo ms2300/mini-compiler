@@ -55,6 +55,9 @@ public class FunctionCFG {
          ReturnVoidInstruction r = new ReturnVoidInstruction();
          exit.add_instruction(r);
       }
+      if (Label.useOP() && Label.isSSA()) {
+         this.blocks.forEach(x -> x.remove_unused());
+      }
    }
 
    private void declare_func() {

@@ -13,6 +13,7 @@ public class BranchConditional extends AbstractInstruction {
       this.cond = cond;
       this.iftrue = iftrue;
       this.iffalse = iffalse;
+      cond.add_use(this);
    }
 
    public String toString() {
