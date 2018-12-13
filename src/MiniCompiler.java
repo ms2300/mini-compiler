@@ -32,14 +32,12 @@ public class MiniCompiler {
             System.out.println("Using optimizations");
             Label.setOP(true);
          }
-         cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
-         writeFile(cfgs, program);
       } else if (_outputStack) {
          System.out.println("Generating stack-based LLVM");
          Label.setSSA(false);
-         cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
-         writeFile(cfgs, program);
       }
+      cfgs = program.getFuncs().stream().map(Function::toCfg).collect(Collectors.toList());
+      writeFile(cfgs, program);
    }
 
    private static String _inputFile = null;
